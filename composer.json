@@ -1,0 +1,32 @@
+{
+    "name": "bex/magento2-extension",
+    "type": "behat-extension",
+    "description": "Magento2 extension for Behat",
+    "keywords": ["magento", "magento2", "tdd","bdd","behat"],
+    "homepage": "https://github.com/tkotosz/BehatMagento2Extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tibor Kotosz",
+            "email": "kotosy@gmail.com",
+            "homepage": "https://github.com/tkotosz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "behat/behat": "^3.5.0"
+    },
+    "require-dev": {
+        "bex/behat-test-runner": "^1.2.1",
+        "phpspec/phpspec": "^2.5"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "Bex\\Behat\\Magento2Extension": "src/"
+        }
+    }
+}

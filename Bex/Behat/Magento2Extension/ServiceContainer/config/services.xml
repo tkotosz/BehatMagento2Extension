@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="bex.magento2_extension.config" class="Bex\Behat\Magento2Extension\ServiceContainer\Config" />
+
+        <service id="magento2.object_manager" class="Bex\Behat\Magento2Extension\Service\MagentoObjectManager" public="true" />
+
+        <service id="bex.magento2_extension.delegating_symfony_service_container_factory" class="Bex\Behat\Magento2Extension\HelperContainer\Factory\DelegatingSymfonyServiceContainerFactory" public="true">
+            <argument type="string">%paths.base%</argument>
+        </service>
+
+        <service id="bex.magento2_extension.magento2_service_container" class="Bex\Behat\Magento2Extension\HelperContainer\Magento2SymfonyServiceContainer" shared="false" public="true">
+            <argument type="service" id="magento2.object_manager" />
+        </service>
+        <service id="bex.behat_service_container" class="Symfony\Component\DependencyInjection\ContainerBuilder" />
+
+        <service id="bex.magento2_extension.service_container" class="Bex\Behat\Magento2Extension\HelperContainer\DelegatingSymfonyServiceContainer" shared="false" public="true">
+            <factory service="bex.magento2_extension.delegating_symfony_service_container_factory" method="create" />
+            <argument type="service" id="bex.magento2_extension.config" />
+            <argument type="collection">
+                <argument type="service" id="bex.behat_service_container" />
+                <argument type="service" id="bex.magento2_extension.magento2_service_container" />
+            </argument>
+            <tag name="helper_container.container" />
+        </service>
+
+        <!-- event listener -->
+        <service id="bex.magento2_extension.object_manager_initializer_listener" class="Bex\Behat\Magento2Extension\Listener\MagentoObjectManagerInitializer" public="false">
+            <tag name="event_dispatcher.subscriber" />
+            <argument type="service" id="bex.magento2_extension.config" />
+        </service>
+    </services>
+</container>
