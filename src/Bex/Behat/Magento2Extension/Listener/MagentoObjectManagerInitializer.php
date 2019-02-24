@@ -5,8 +5,6 @@ namespace Bex\Behat\Magento2Extension\Listener;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use Bex\Behat\Magento2Extension\ServiceContainer\Config;
-use Diff\Differ\MapDiffer;
-use Diff\Patcher\MapPatcher;
 use Magento\Authorization\Model\ResourceModel\Role\Collection;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\Area;
@@ -71,7 +69,6 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
         ];
 
         $bootstrap = Bootstrap::create(BP, $params);
-        $bootstrap->createApplication($this->config->getMagentoApplicationClass());
 
         $magentoObjectManager = ObjectManager::getInstance();
 
