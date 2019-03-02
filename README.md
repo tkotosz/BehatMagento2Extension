@@ -1,12 +1,12 @@
-Behat-Magento2Extension
+BehatMagento2Extension
 =========================
 
-Behat-BehatMagento2Extension provides a custom service container for Behat which allows to inject Magento services into Contexts and behat helper services.
+The `BehatMagento2Extension` provides a custom service container for Behat which allows to inject Magento services into Behat Contexts and Behat helper services.
 
 Installation
 ------------
 
-Install by adding to your `composer.json`:
+The recommended installation method is through [Composer](https://getcomposer.org):
 
 ```bash
 composer require --dev bex/behat-magento2-extension
@@ -32,7 +32,7 @@ default:
       services: '@bex.magento2_extension.service_container'
 ```
 
-With the above configuration Behat will use the service container provided by this extension which makes all services defined in the Magento 2 DI available to inject into any context.
+With the above configuration Behat will use the service container provided by this extension which makes all services defined in the Magento 2 DI available to inject into any Context.
 
 Basic Usage
 -----------
@@ -76,7 +76,7 @@ That's all. With the above the Product Repository will be available in your Beha
 Use Behat Helper Services
 -------------------------
 
-If you are familiar with the [behat helper container](https://github.com/Behat/Behat/pull/974) feature in Behat then probably you already got used to defining helper services under the `services` configuration key like this:
+If you are familiar with the [helper container](https://github.com/Behat/Behat/pull/974) feature in Behat then probably you already got used to defining helper services under the `services` configuration key like this:
 
 ```yml
 default:
@@ -103,7 +103,7 @@ default:
     Bex\Behat\Magento2Extension:
       services: features/bootstrap/config/services.yml
 ```
-Note: You can use yml, xml or php format. For more information see the official documentation of the [Symfony DI component](https://symfony.com/doc/current/components/dependency_injection.html).
+Note: You can use `yml`, `xml` or `php` format. For more information see the official documentation of the [Symfony DI component](https://symfony.com/doc/current/components/dependency_injection.html).
 
 2. Define your helper service:
 
@@ -246,7 +246,7 @@ class SharedService
 }
 ```
 
-These are all the options available for you. Note that in the same way as in Example 3 you can inject these services directly to the Contexts as well.
+These are all the options available for you. Note that in the same way as in `Example 3` you can inject these services directly to the Contexts as well.
 
 Autowire Context arguments
 --------------------------
@@ -271,7 +271,7 @@ Note that the argument resolver is able to autowire services for:
  - step definition arguments
  - transformation arguments
  
-For more information see the description [here](https://github.com/Behat/Behat/pull/1071).
+For more information see the documentation [here](https://github.com/Behat/Behat/pull/1071).
 
 Autowire arguments for helper services
 --------------------------------------
@@ -298,6 +298,7 @@ As you can see all injectable service argument removed now. But we still need to
 
 Additional configuration options 
 --------------------------------
+
 ### Configure the Magento bootstrap path
 
 If your Magento `bootstrap.php` is not available in the default `app/bootstrap.php` location then you can specify the custom path in the following way:
@@ -311,8 +312,8 @@ default:
 
 ### Configure the Magento area
 
-Services in the Magento DI can be defined on global level (in any module's etc/di.xml) but you can also define and/or override services for a specific Magento area.
-When testing your feature you might wanna access services defined for a specific area so in order to support this the extension provides and additional config option which you can change per test suite.
+Services in the Magento DI can be defined on global level (in any module's `etc/di.xml`) but you can also define and/or override services for a specific Magento area.
+When testing your feature you might want to access services defined for a specific area so in order to support this the extension provides an additional config option which you can change per test suite.
 You can configure the required area in the following way:
 
 ```yml
@@ -335,13 +336,14 @@ Note that by default only the `global` area services are loaded. When specifying
 
 ### Mocking dependencies
 
-When you test your feature you might want to mock some services to e.g. avoid using external services like database, cache, etc. in your domain test.
+When you test your feature you might want to mock some services to e.g. avoid using external services like database, cache, etc. in your domain tests.
 
 In order to achieve this we can use a custom Magento area where we can easily replace dependencies during our test run.
 
 To do this we need to 2 things:
 1. Configure a new test area in Magento
-2. Configure this test area in our Behat suite configuration
+2. Define our custom DI configuration
+3. Configure this test area in our Behat suite configuration
 
 The first can be done by defining the custom area in our module's `etc/di.xml` in the following way:
 ```xml
@@ -357,7 +359,9 @@ The first can be done by defining the custom area in our module's `etc/di.xml` i
 </config>
 ```
 
-Then we can freely change and DI configuration in our module's `etc/my_feature_test/di.xml`. (Just don't forget to clear the Magento cache to reload the available are codes)
+Note: Don't forget to clear the Magento cache to reload the available are codes.
+
+Then we can freely change and DI configuration in our module's `etc/my_feature_test/di.xml`.
 
 For example lets say we have a service like this in our module:
 
@@ -458,7 +462,7 @@ Then we can register it in our test area in the `etc/my_feature_test/di.xml`:
 </config>
 ```
 
-Now we just need to configure our suite to use this custom area:
+The only thing left is to configure our suite to use this custom area:
 
 ```yml
 default:
@@ -475,17 +479,17 @@ default:
         area: my_feature_test
 ```
 
-And that's all. If you inject a service into you Context which uses the `OrderProvider` or inject the `OrderProvider` itself then the `FakeOrderRepository` will be used instead of the default `OrderRepository`.
+And that's all. If you inject a service into you Context which uses the `OrderProvider` or inject the `OrderProvider` itself then the `FakeOrderRepository` will be used as its dependency instead of the default `OrderRepository`.
 
 Notes:
 
 1. Defining the test area:
 
-If you don't want to specify a test area specifically for your module then you can install the [Test area](https://packagist.org/packages/tkotosz/test-area-magento2) Magento 2 module which will define an are called `test` for you, so you can do the di overrides in your module's `etc/test/di.xml`.
+If you don't want to specify a test area specifically for your module then you can install the [Test area](https://packagist.org/packages/tkotosz/test-area-magento2) Magento 2 module which will define an area called `test` for you, so you can do the di overrides in your module's `etc/test/di.xml`.
 
 2. Extending a base area:
 
-By default in all area extends the `global` area, but you might want to use another area as your base area. This can be configured in the behat config as well.
+By default all area extends the `global` area, but you might want to use another area as your base area. This can be configured in the behat config:
 
 For example if you would like to use the `adminhtml` area and just override some services from that area, then you can configure the following in behat:
 
@@ -504,7 +508,7 @@ default:
         area: [adminhtml, my_feature_test]
 ```
 
-The extension will take care of the loading and merging the service configurations of these areas in the provided order. So in the above example the following will happen:
+The extension will take care of the loading and merging of the service configurations of these areas in the provided order. So in the above example the following will happen:
 1. `global` area is loaded
 2. `adminhtml` area is loaded and overrides services / adds new services
 3. `my_feature_test` area is loaded and overrides services / adds new services
