@@ -4,7 +4,7 @@ namespace Bex\Behat\Magento2Extension\ServiceContainer;
 
 class Config
 {
-    const CONFIG_KEY_MAGENTO_BOOTSTRAP_PATH = 'bootstrap_path';
+    const CONFIG_KEY_MAGENTO_BOOTSTRAP = 'bootstrap';
     const CONFIG_KEY_SERVICES = 'services';
 
     /**
@@ -22,7 +22,7 @@ class Config
      */
     public function __construct(array $config)
     {
-        $this->magentoBootstrapPath = $config[self::CONFIG_KEY_MAGENTO_BOOTSTRAP_PATH];
+        $this->magentoBootstrapPath = $config[self::CONFIG_KEY_MAGENTO_BOOTSTRAP];
         $this->servicesPath = $config[self::CONFIG_KEY_SERVICES];
     }
 

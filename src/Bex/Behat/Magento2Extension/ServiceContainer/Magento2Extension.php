@@ -29,7 +29,7 @@ class Magento2Extension implements Extension
     {
         $builder
             ->children()
-                ->scalarNode(Config::CONFIG_KEY_MAGENTO_BOOTSTRAP_PATH)
+                ->scalarNode(Config::CONFIG_KEY_MAGENTO_BOOTSTRAP)
                     ->defaultValue(getcwd() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'bootstrap.php')
                 ->end()
                 ->scalarNode(Config::CONFIG_KEY_SERVICES)
