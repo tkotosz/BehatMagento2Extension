@@ -137,7 +137,6 @@ default:
 
 use Behat\Behat\Context\Context;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Toom\Acceptance\Service\SharedService;
 
 class FirstContext implements Context
 {
