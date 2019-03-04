@@ -5,8 +5,6 @@ namespace Bex\Behat\Magento2Extension\Listener;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\SuiteTested;
 use Bex\Behat\Magento2Extension\ServiceContainer\Config;
-use Magento\Authorization\Model\ResourceModel\Role\Collection;
-use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -14,8 +12,10 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Registry;
-use Magento\User\Model\UserFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Magento\Authorization\Model\ResourceModel\Role\Collection;
+use Magento\Backend\Model\Auth\Session;
+use Magento\User\Model\UserFactory;
 
 class MagentoObjectManagerInitializer implements EventSubscriberInterface
 {

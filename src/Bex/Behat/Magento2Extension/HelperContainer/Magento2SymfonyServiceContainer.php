@@ -4,15 +4,6 @@ namespace Bex\Behat\Magento2Extension\HelperContainer;
 
 use Bex\Behat\Magento2Extension\Service\MagentoObjectManager;
 use Interop\Container\ContainerInterface;
-use Magento\Authorization\Model\ResourceModel\Role\Collection;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\State;
-use Magento\Framework\ObjectManager\ConfigLoaderInterface;
-use Magento\Framework\Registry;
-use Magento\User\Model\UserFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyServiceContainer;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
