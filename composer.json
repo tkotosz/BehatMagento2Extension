@@ -16,7 +16,10 @@
     "require": {
         "php": ">=7.1",
         "behat/behat": "^3.5.0",
-        "magento/framework": ">=100.1"
+        "magento/framework": ">=100.1",
+        "container-interop/container-interop": "^1.2",
+        "symfony/dependency-injection": ">=2.0",
+        "symfony/event-dispatcher": ">=2.0"
     },
     "require-dev": {
         "bex/behat-test-runner": "^1.2.1",
