@@ -15,7 +15,14 @@
     ],
     "require": {
         "php": ">=7.1",
-        "behat/behat": "^3.5.0"
+        "behat/behat": "^3.5.0",
+        "magento/framework": ">=100.1",
+        "container-interop/container-interop": "^1.2",
+        "symfony/dependency-injection": ">=2.0",
+        "symfony/event-dispatcher": ">=2.0",
+        "magento/module-authorization": "*",
+        "magento/module-user": "*",
+        "magento/module-backend": "*"
     },
     "require-dev": {
         "bex/behat-test-runner": "^1.2.1",
@@ -28,5 +35,11 @@
         "psr-0": {
             "Bex\\Behat\\Magento2Extension": "src/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ]
 }
