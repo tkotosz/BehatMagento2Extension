@@ -72,12 +72,12 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
         throw new ServiceNotFoundException($id);
     }
 
-    public function compile()
+    public function compile(bool $resolveEnvPlaceholders = false)
     {
         foreach ($this->fallbackContainers as $serviceContainer) {
             $this->parameterBag->add($serviceContainer->getParameterBag()->all());
         }
 
-        parent::compile();
+        parent::compile($resolveEnvPlaceholders);
     }
 }
