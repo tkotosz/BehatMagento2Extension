@@ -21,6 +21,10 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
 
     public function has($id)
     {
+        if (is_null($id)) {
+            return false;
+        }
+
         if (parent::has($id)) {
             return true;
         }
