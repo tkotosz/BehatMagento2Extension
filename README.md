@@ -114,6 +114,9 @@ Note: You can use `yml`, `xml` or `php` format. For more information see the off
 
 ```yml
 services:
+  _defaults:
+    public: true
+  
   SharedService: ~
 ```
 
