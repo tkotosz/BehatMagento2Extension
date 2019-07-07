@@ -166,6 +166,9 @@ You can simply do this in the following way:
 
 ```yml
 services:
+  _defaults:
+    public: true
+    
   AnotherSharedService: ~
 
   SharedService:
@@ -178,7 +181,13 @@ Which means you can inject any service defined by the Behat application itself o
 1. Example 1 - Inject from Magento DI:
 
 ```yml
+_defaults:
+  public: true
+  
 services:
+  _defaults:
+    public: true
+    
   AnotherSharedService: ~
 
   SharedService:
@@ -193,6 +202,9 @@ Let's say you have the [Mink extension](https://packagist.org/packages/behat/min
 
 ```yml
 services:
+  _defaults:
+    public: true
+    
   AnotherSharedService: ~
 
   SharedService:
@@ -204,8 +216,11 @@ services:
 
 3. Example 3 - Inject parameter from Behat service container:
 
-```yml
+```yml  
 services:
+  _defaults:
+    public: true
+    
   AnotherSharedService: ~
 
   SharedService:
@@ -286,6 +301,7 @@ You can enable this feature by adding the `autowire: true` configuration to your
 ```yml
 services:
   _defaults:
+    public: true
     autowire: true
 
   AnotherSharedService: ~
