@@ -69,26 +69,26 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
         ];
 
         $bootstrap = Bootstrap::create(BP, $params);
-
         $magentoObjectManager = ObjectManager::getInstance();
 
-        $appState = $magentoObjectManager->get(State::class);
-
-        $baseArea = array_shift($areas);
-        $appState->setAreaCode($baseArea);
-
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
-        $config = $configLoader->load($baseArea);
 
-        // apply di overrides from other areas
-        foreach ($areas as $additionalArea) {
+        $config = [];
+        foreach ($areas as $area) {
             $config = array_replace_recursive(
                 $config,
-                $this->arrayRecursiveDiff($configLoader->load($additionalArea), $configLoader->load(Area::AREA_GLOBAL))
+                $this->arrayRecursiveDiff($configLoader->load($area), $configLoader->load(Area::AREA_GLOBAL))
             );
         }
 
+        $bootstrap = Bootstrap::create(BP, $params);
+        $magentoObjectManager = ObjectManager::getInstance();
+
         $magentoObjectManager->configure($config);
+
+        $baseArea = array_shift($areas);
+        $appState = $magentoObjectManager->get(State::class);
+        $appState->setAreaCode($baseArea);
 
         // TODO can we remove this?
         if ($appState->getAreaCode() === Area::AREA_ADMINHTML) {
