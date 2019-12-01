@@ -73,7 +73,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
 
-        $config = [];
+        $config = $configLoader->load(Area::AREA_GLOBAL);
         foreach ($areas as $area) {
             $config = array_replace_recursive(
                 $config,
