@@ -89,12 +89,16 @@ Note that by default only the ``global`` area services are loaded. When specifyi
 If you have a ``test`` area (see Configure Magento DI overrides section) then you can configure it here as area. Also if you would like to use a built-in area in combination with the test area then you can configure it like this:
 
 .. code-block:: yaml
+
     magento:
       area: [adminhtml, test]
 
 The extension will take care of the loading and merging of the service configurations of these areas in the provided order. So in the above example the following will happen:
+
 1. ``global`` area is loaded
+
 2. ``adminhtml`` area is loaded and overrides services / adds new services
+
 3. ``test`` area is loaded and overrides services / adds new services
 
 Configure Magento DI overrides
@@ -132,6 +136,7 @@ Note: Don't forget to clear the Magento cache to reload the available area codes
 Since the ``test`` area now exsits as a valid area code in Magento, you can freely change any DI configuration in your module's `etc/test/di.xml`. E.g.:
 
 .. code-block:: xml
+
     <?xml version="1.0"?>
     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
         <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Foo\Bar\Test\FakeProductRepository" />
@@ -142,6 +147,7 @@ Since the ``test`` area now exsits as a valid area code in Magento, you can free
 In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
 
 .. code-block:: yml
+
     default:
       suites:
         yoursuite:
@@ -196,6 +202,7 @@ Note: You can use ``yml``, ``xml`` or ``php`` format. For more information see t
 Define your helper services in the servies configuration file which you created in the first step.
 
 .. code-block:: yaml
+
     services:
       _defaults:
         public: true
@@ -205,6 +212,7 @@ Define your helper services in the servies configuration file which you created 
 3. Inject your helper service into your Behat Context:
 
 .. code-block:: yaml
+
     default:
       suites:
         yoursuite:
@@ -225,6 +233,7 @@ Since the helper services are defined in a custom Symfony DI container (see Conf
 You can simply do this in the following way:
 
 .. code-block:: yaml
+
     services:
       _defaults:
         public: true
@@ -237,6 +246,7 @@ You can simply do this in the following way:
 In addition to this the extension gives you access to any service defined in the default Behat service container or in the Magento DI. Which means you can inject any service defined by the Behat application itself or by any Behat extension or by Magento into your helper services.
 
 .. code-block:: yaml
+
     services:
       _defaults:
         public: true
@@ -263,6 +273,7 @@ The helper services are defined in the custom Symfony DI container (see Configur
 You can enable this feature by adding the ``autowire: true`` configuration to your service container configuration.
 
 .. code-block:: yaml
+
     services:
       _defaults:
         public: true
