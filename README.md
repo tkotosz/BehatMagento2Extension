@@ -363,7 +363,7 @@ When you test your feature you might want to mock some services to e.g. avoid us
 
 In order to achieve this we can use a custom Magento area where we can easily replace dependencies during our test run.
 
-To do this we need to 2 things:
+To do this we need to do 3 things:
 1. Configure a new test area in Magento
 2. Define our custom DI configuration
 3. Configure this test area in our Behat suite configuration
@@ -375,7 +375,7 @@ The first can be done by defining the custom area in our module's `etc/di.xml` i
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
-                <item name="my_feature_test" xsi:type="null" />
+                <item name="test" xsi:type="null" />
             </argument>
         </arguments>
     </type>
@@ -384,7 +384,7 @@ The first can be done by defining the custom area in our module's `etc/di.xml` i
 
 Note: Don't forget to clear the Magento cache to reload the available are codes.
 
-Then we can freely change and DI configuration in our module's `etc/my_feature_test/di.xml`.
+Then we can freely change and DI configuration in our module's `etc/test/di.xml`.
 
 For example lets say we have a service like this in our module:
 
@@ -431,7 +431,7 @@ class OrderProvider
 
         $items = $searchResults->getItems();
 
-        return array_shift($items);
+        return array_shift($items) ?: null;
     }
 }
 ```
@@ -473,7 +473,7 @@ class FakeOrderRepository implements OrderRepositoryInterface
 }
 ```
 
-Then we can register it in our test area in the `etc/my_feature_test/di.xml`:
+Then we can register it in our test area in the `etc/test/di.xml`:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -499,7 +499,7 @@ default:
       services: '@bex.magento2_extension.service_container'
       
       magento:
-        area: my_feature_test
+        area: test
 ```
 
 And that's all. If you inject a service into you Context which uses the `OrderProvider` or inject the `OrderProvider` itself then the `FakeOrderRepository` will be used as its dependency instead of the default `OrderRepository`.
@@ -508,7 +508,7 @@ Notes:
 
 1. Defining the test area:
 
-If you don't want to specify a test area specifically for your module then you can install the [Test area](https://packagist.org/packages/tkotosz/test-area-magento2) Magento 2 module which will define an area called `test` for you, so you can do the di overrides in your module's `etc/test/di.xml`.
+If you don't want to specify a test area specifically for your module then you can install the [Test area Magento 2 module](https://packagist.org/packages/tkotosz/test-area-magento2) which will define an area called `test` for you, so you can do the di overrides in your module's `etc/test/di.xml`.
 
 2. Extending a base area:
 
@@ -528,11 +528,10 @@ default:
       services: '@bex.magento2_extension.service_container'
       
       magento:
-        area: [adminhtml, my_feature_test]
+        area: [adminhtml, test]
 ```
 
 The extension will take care of the loading and merging of the service configurations of these areas in the provided order. So in the above example the following will happen:
 1. `global` area is loaded
 2. `adminhtml` area is loaded and overrides services / adds new services
-3. `my_feature_test` area is loaded and overrides services / adds new services
-
+3. `test` area is loaded and overrides services / adds new services
