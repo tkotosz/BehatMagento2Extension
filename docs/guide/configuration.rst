@@ -146,7 +146,7 @@ Since the ``test`` area now exsits as a valid area code in Magento, you can free
 
 In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
 
-.. code-block:: yml
+.. code-block:: yaml
 
     default:
       suites:
