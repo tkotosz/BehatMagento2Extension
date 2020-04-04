@@ -195,24 +195,24 @@ Note: You can use ``yml``, ``xml`` or ``php`` format. For more information see t
 
 Define your helper services in the servies configuration file which you created in the first step.
 
-    .. code-block:: yaml
-        services:
-          _defaults:
-            public: true
-          
-          SharedService: ~
+.. code-block:: yaml
+    services:
+      _defaults:
+        public: true
+      
+      SharedService: ~
 
 3. Inject your helper service into your Behat Context:
 
-    .. code-block:: yaml
-        default:
-          suites:
-            yoursuite:
-              contexts:
-                - YourContext:
-                  - '@Magento\Catalog\Api\ProductRepositoryInterface'
-                  - '@SharedService'
-              services: '@bex.magento2_extension.service_container'
+.. code-block:: yaml
+    default:
+      suites:
+        yoursuite:
+          contexts:
+            - YourContext:
+              - '@Magento\Catalog\Api\ProductRepositoryInterface'
+              - '@SharedService'
+          services: '@bex.magento2_extension.service_container'
 
 Alternatively if you are using autowiring (see Enable Autowiring for Contexts section) then you can skip this step since the context arguments will be autowired even from this custom Symfony service container.
 
