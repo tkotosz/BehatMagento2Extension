@@ -108,54 +108,54 @@ To do this we need to do 3 things:
 
 1. Configure a new test area in Magento
 
-    This can be done by defining the custom area in your module's ``etc/di.xml`` in the following way:
+This can be done by defining the custom area in your module's ``etc/di.xml`` in the following way:
 
-    .. code-block:: xml
+.. code-block:: xml
 
-        <?xml version="1.0" encoding="utf-8"?>
-        <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-            <type name="Magento\Framework\App\AreaList">
-                <arguments>
-                    <argument name="areas" xsi:type="array">
-                        <item name="test" xsi:type="null" />
-                    </argument>
-                </arguments>
-            </type>
-        </config>
+    <?xml version="1.0" encoding="utf-8"?>
+    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+        <type name="Magento\Framework\App\AreaList">
+            <arguments>
+                <argument name="areas" xsi:type="array">
+                    <item name="test" xsi:type="null" />
+                </argument>
+            </arguments>
+        </type>
+    </config>
 
-    Alternatively you can install the `Test area Magento 2 module <https://packagist.org/packages/tkotosz/test-area-magento2>`_ which will define an area called ``test`` for you, so you can do the di overrides in your module's ``etc/test/di.xml``.
+Alternatively you can install the `Test area Magento 2 module <https://packagist.org/packages/tkotosz/test-area-magento2>`_ which will define an area called ``test`` for you, so you can do the di overrides in your module's ``etc/test/di.xml``.
 
-    Note: Don't forget to clear the Magento cache to reload the available area codes.
+Note: Don't forget to clear the Magento cache to reload the available area codes.
 
 2. Define custom DI configuration in that area
 
-    Since the ``test`` area now exsits as a valid area code in Magento, you can freely change any DI configuration in your module's `etc/test/di.xml`. E.g.:
+Since the ``test`` area now exsits as a valid area code in Magento, you can freely change any DI configuration in your module's `etc/test/di.xml`. E.g.:
 
-    .. code-block: xml
-        <?xml version="1.0"?>
-        <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-            <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Foo\Bar\Test\FakeProductRepository" />
-        </config>
+.. code-block:: xml
+    <?xml version="1.0"?>
+    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+        <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Foo\Bar\Test\FakeProductRepository" />
+    </config>
 
 3. Configure this test area in the Behat suite configuration
 
-    In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
+In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
 
-    .. code-block:: yml
-        default:
-          suites:
-            yoursuite:
-              autowire: true
-              
-              contexts:
-                - YourContext
-              
-              services: '@bex.magento2_extension.service_container'
-              
-              magento:
-                area: test
+.. code-block:: yml
+    default:
+      suites:
+        yoursuite:
+          autowire: true
+          
+          contexts:
+            - YourContext
+          
+          services: '@bex.magento2_extension.service_container'
+          
+          magento:
+            area: test
 
-    Note that the above configuration will only load services from the ``global`` and ``test`` areas. If you would like to load services from another area as well (e.g. ``adminhtml``) then you can specify the a list of area codes as parameter for the ``area`` config option. For more information see the "Configure the Magento area" section above.
+Note that the above configuration will only load services from the ``global`` and ``test`` areas. If you would like to load services from another area as well (e.g. ``adminhtml``) then you can specify the a list of area codes as parameter for the ``area`` config option. For more information see the "Configure the Magento area" section above.
 
 And that's all. If you inject a service into you Context which uses the ``ProductRepositoryInterface`` or inject the ``ProductRepositoryInterface`` itself then the ``FakeProductRepository`` will be used as its dependency instead of the default ``ProductRepository``.
 
