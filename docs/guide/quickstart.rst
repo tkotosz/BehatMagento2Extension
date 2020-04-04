@@ -25,7 +25,9 @@ Similarly you can install the extension via composer:
 
 For more information see the the :doc:`installation section of this documentation </guide/installation>`.
 
+=================================
 3. Update the Behat configuration
+=================================
 
 You need to enable the extension in the Behat configuration and configure your Behat Suite to use the Magento 2 Service Container. Your ``behat.yml`` should look like this:
 
