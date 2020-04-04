@@ -56,6 +56,7 @@ And you have the following DI config to mark this implementation as the default 
 In addition to these you have an application service which depends on this config interface, e.g.:
 
 .. code-block:: php
+
     <?php
 
     namespace Vendor\ModuleName\Service;
