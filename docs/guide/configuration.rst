@@ -163,7 +163,7 @@ In order to load this custom DI configuration during the test run the test area 
 
 Note that the above configuration will only load services from the ``global`` and ``test`` areas. If you would like to load services from another area as well (e.g. ``adminhtml``) then you can specify the a list of area codes as parameter for the ``area`` config option. For more information see the "Configure the Magento area" section above.
 
-And that's all. If you inject a service into you Context which uses the ``ProductRepositoryInterface`` or inject the ``ProductRepositoryInterface`` itself then the ``FakeProductRepository`` will be used as its dependency instead of the default ``ProductRepository``.
+And that's all. If you inject a service into your Context which uses the ``ProductRepositoryInterface`` or inject the ``ProductRepositoryInterface`` itself then the ``FakeProductRepository`` will be used as its dependency instead of the default ``ProductRepository``.
 
 Configure Behat Helper Services
 -------------------------------
@@ -188,12 +188,12 @@ Unfortunately the custom service container is registered under the same key (see
 But don't worry this extension allows you to register your helper services in a custom Symfony DI container in the following way:
 
 1. Configure the path for the service container configuration file:
-    .. code-block:: yaml
+.. code-block:: yaml
 
-        default:
-          extensions:
-            Bex\Behat\Magento2Extension:
-              services: features/bootstrap/config/services.yml
+    default:
+      extensions:
+        Bex\Behat\Magento2Extension:
+          services: features/bootstrap/config/services.yml
 
 Note: You can use ``yml``, ``xml`` or ``php`` format. For more information see the official documentation of the `Symfony DI component <https://symfony.com/doc/current/components/dependency_injection.html>`_.
 
@@ -261,9 +261,13 @@ In addition to this the extension gives you access to any service defined in the
           - '%paths.base%'
 
 In the above example we injected services from various places:
+
 - ``@AnotherSharedService`` injected from the helper service container
+
 - ``@Magento\Sales\Api\OrderRepositoryInterface`` injected from the Magento DI
+
 - ``@mink`` injected from the `MinkExtension <https://packagist.org/packages/behat/mink-extension>`_ (this example only works if you have the MinkExtension extension installed)
+
 - ``%paths.base%`` injected from the Behat built-in service container
 
 Enable Autowiring for helper services
