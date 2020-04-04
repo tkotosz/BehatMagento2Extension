@@ -1,7 +1,11 @@
 Quick start
 -----------
 
-1. Install Behat if you didn't install it already
+================
+1. Install Behat
+================
+
+If you didn't install Behat already, then you can install it with composer in the following way:
 
   .. code-block:: bash
 
@@ -9,7 +13,11 @@ Quick start
 
 For alternative installation options check the `Behat official documentation <https://docs.behat.org/en/latest/quick_start.html#installation>`_
 
+========================================
 2. Install the Behat Magento 2 Extension
+========================================
+
+Similarly you can install the extension via composer:
 
   .. code-block:: bash
 
@@ -17,7 +25,9 @@ For alternative installation options check the `Behat official documentation <ht
 
 For more information see the the :doc:`installation section of this documentation </guide/installation>`.
 
-3. Update the Behat configuration in the ``behat.yml``
+3. Update the Behat configuration
+
+You need to enable the extension in the Behat configuration and configure your Behat Suite to use the Magento 2 Service Container. Your ``behat.yml`` should look like this:
 
     .. code-block:: yaml
 
@@ -41,7 +51,11 @@ With the above configuration:
 
 For more detailed information see the :doc:`configuration section of this documentation </guide/configuration>`.
 
-4. Create a feature file in ``features/bootstrap/my_feature.feature``
+========================
+4. Create a feature file
+========================
+
+In order to verify that the extension is configured correctly you will need a test feature. For example create a ``features/my_feature.feature`` file like this:
 
     .. code-block:: gherkin
 
@@ -55,7 +69,11 @@ For more detailed information see the :doc:`configuration section of this docume
             When I work with Behat
             Then I am happy
 
-5. Create a Behat Context in ``features/bootstrap/FeatureContext.php``
+=========================
+5. Create a Behat Context
+=========================
+
+To implement the above feature you need to add the following step definitions to your ``features/bootstrap/FeatureContext.php`` Behat Context:
 
     .. code-block:: php
 
@@ -104,7 +122,12 @@ For more detailed information see the :doc:`configuration section of this docume
 
 Note that here we inject the Order Repository Magento service through the Context constructor, but it is also possible to inject it through the Behat Step definition as well. For more information see the :doc:`usage section of this documentation </guide/usage>`.
 
-6. Run Behat and you should see the test passing
+=========================
+6. Run Behat 
+=========================
+
+Run Behat and you should see the test passing.
+
     .. code-block:: bash
 
         $ bin/behat features/my_feature.feature
