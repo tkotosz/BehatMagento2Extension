@@ -1,8 +1,8 @@
 Configuration
 =============
 
-Enabling the Extension
-----------------------
+Enable the Extension
+--------------------
 
 You can enable the extension in your ``behat.yml`` in following way:
 
@@ -38,7 +38,11 @@ Note that you need to pass over the dependencies to your Contexts manually like 
           
           services: '@bex.magento2_extension.service_container'
 
-Or alternatively you can turn on the Behat autowire feature to inject the servies automatically:
+Enable Autowiring for Contexts
+------------------------------
+
+This extension does not override the default Behat argument resolvers. Because of this you can take advantage of the default `Behat service autowiring feature <https://github.com/Behat/Behat/pull/1071>`_.
+You can enable this feature by adding ``autowire: true`` to the behat config of your test suite. After that services from Magento will be automatically injected to the Contexts without any manual configuration.
 
 .. code-block:: yaml
 
@@ -51,6 +55,13 @@ Or alternatively you can turn on the Behat autowire feature to inject the servie
             - YourContext
 
           services: '@bex.magento2_extension.service_container'
+
+Note that the argument resolver is able to autowire services for:
+ - constructor arguments
+ - step definition arguments
+ - transformation arguments
+ 
+For more information see the :doc:`usage examples section of this documentation </guide/usage>`.
 
 Configure the Magento bootstrap path
 ------------------------------------
