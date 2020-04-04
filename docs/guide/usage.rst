@@ -219,7 +219,7 @@ The `Behat service autowiring feature <https://github.com/Behat/Behat/pull/1071>
 Inject service to Behat Context as Behat Step Argument Transformer argument
 ---------------------------------------------------------------------------
 
-The `Behat service autowiring feature <https://github.com/Behat/Behat/pull/1071>`_ allows to inject services from the configured service container to any of the [Step Argument Transformer](http://behat.org/en/latest/user_guide/context/definitions.html#step-argument-transformations) method as argument. You can use this feature in combination with this extension as well. E.g.:
+The `Behat service autowiring feature <https://github.com/Behat/Behat/pull/1071>`_ allows to inject services from the configured service container to any of the `Step Argument Transformer <http://behat.org/en/latest/user_guide/context/definitions.html#step-argument-transformations>`_ method as argument. You can use this feature in combination with this extension as well. E.g.:
 
 **Feature:**
 
