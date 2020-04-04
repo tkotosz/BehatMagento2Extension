@@ -1,27 +1,56 @@
 Configuration
 =============
 
-Basic Configuration
--------------------
+Enabling the Extension
+----------------------
 
-1. Activate the extension in your ``behat.yml``:
+You can enable the extension in your ``behat.yml`` in following way:
 
-    .. code-block:: yaml
+.. code-block:: yaml
 
-        default:
-          extensions:
-            Bex\Behat\Magento2Extension: ~
+    default:
+      extensions:
+        Bex\Behat\Magento2Extension: ~
 
-2. Configure the Magento2 Behat Service Container for your test suite:
+Configure the Service Container
+-------------------------------
+In order to be able to access the Magento 2 services from your Behat Contexts you need to configure the Magento2 Behat Service Container for your test suite. You can do it like this:
 
-    .. code-block:: yaml
+.. code-block:: yaml
 
-        default:
-          suites:
-            yoursuite:
-              services: '@bex.magento2_extension.service_container'
+    default:
+      suites:
+        yoursuite:
+          services: '@bex.magento2_extension.service_container'
 
 With the above configuration Behat will use the service container provided by this extension which makes all services defined in the Magento 2 DI available to inject into any Context.
+
+Note that you need to pass over the dependencies to your Contexts manually like this:
+
+.. code-block:: yaml
+
+    default:
+      suites:
+        yoursuite:
+          contexts:
+            - YourContext:
+              - '@Magento\Catalog\Api\ProductRepositoryInterface'
+          
+          services: '@bex.magento2_extension.service_container'
+
+Or alternatively you can turn on the Behat autowire feature to inject the servies automatically:
+
+.. code-block:: yaml
+
+    default:
+      suites:
+        yoursuite:
+          autowire: true
+          
+          contexts:
+            - YourContext
+
+          services: '@bex.magento2_extension.service_container'
 
 Configure the Magento bootstrap path
 ------------------------------------

@@ -1,5 +1,5 @@
-Usage
-=====
+Usage Examples
+==============
 
 Manually Inject Services to Context
 -----------------------------------
