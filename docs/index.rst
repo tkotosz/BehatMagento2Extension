@@ -13,3 +13,12 @@ Guide
     guide/installation
     guide/configuration
     guide/usage
+
+References
+----------
+
+- Github Repository: https://github.com/tkotosz/BehatMagento2Extension
+
+- Packagist: https://packagist.org/packages/bex/behat-magento2-extension
+
+- Behat Official Documentaion: https://docs.behat.org
