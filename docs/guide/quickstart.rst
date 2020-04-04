@@ -15,7 +15,7 @@ For alternative installation options check the `Behat official documentation <ht
 
       $ composer require --dev bex/behat-magento2-extension
 
-For more information see the the `installation section of this documentation </guide/installation>`_.
+For more information see the the :doc:`installation section of this documentation </guide/installation>`.
 
 3. Update the Behat configuration in the ``behat.yml``
 
@@ -39,7 +39,7 @@ With the above configuration:
  - The ``application`` suite uses the Behat Magento 2 service container
  - The Behat Context dependencies are autowired
 
-For more detailed information see the `configuration section of this documentation </guide/configuration>`_.
+For more detailed information see the :doc:`configuration section of this documentation </guide/configuration>`.
 
 4. Create a feature file in ``features/bootstrap/my_feature.feature``
 
@@ -102,7 +102,7 @@ For more detailed information see the `configuration section of this documentati
             }
         }
 
-Note that here we inject the Order Repository Magento service through the Context constructor, but it is also possible to inject it through the Behat Step definition as well. For more information see the `usage section of this documentation </guide/usage>`_.
+Note that here we inject the Order Repository Magento service through the Context constructor, but it is also possible to inject it through the Behat Step definition as well. For more information see the :doc:`usage section of this documentation </guide/usage>`.
 
 6. Run Behat and you should see the test passing
     .. code-block:: bash
