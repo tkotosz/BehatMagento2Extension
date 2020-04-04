@@ -51,7 +51,7 @@ And you have the following DI config to mark this implementation as the default 
 
 .. code-block:: xml
 
-<preference for="Vendor\ModuleName\Config\ConfigProviderInterface" type="Vendor\ModuleName\Config\ConfigProvider" />
+    <preference for="Vendor\ModuleName\Config\ConfigProviderInterface" type="Vendor\ModuleName\Config\ConfigProvider" />
 
 In addition to these you have an application service which depends on this config interface, e.g.:
 
