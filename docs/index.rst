@@ -9,6 +9,7 @@ Guide
 .. toctree::
     :maxdepth: 2
 
+    guide/quickstart
     guide/installation
     guide/configuration
     guide/usage

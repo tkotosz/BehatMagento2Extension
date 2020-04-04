@@ -47,8 +47,6 @@ You can configure the required area in the following way:
     default:
       suites:
         yoursuite:
-          autowire: true
-          
           contexts:
             - YourContext
           
