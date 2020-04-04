@@ -8,3 +8,4 @@ Usage Examples
     usage/automatically-inject-service-to-behat-context-as-constructor-argument
     usage/inject-service-to-behat-context-as-behat-step-argument
     usage/inject-service-to-behat-context-as-behat-step-argument-transformer-argument
+    usage/mocking-dependency
