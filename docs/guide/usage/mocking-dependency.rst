@@ -136,6 +136,12 @@ E.g.:
 
     class FakeConfigProvider implements ConfigProviderInterface
     {
+        /** @var bool */
+        private $isFreeDeliveryEnabled = false;
+
+        /** @var float */
+        private $freeDeliveryThreshold = 0.0;
+
         public function isFreeDeliverEnabled(): bool
         {
             return $this->isFreeDeliveryEnabled;
