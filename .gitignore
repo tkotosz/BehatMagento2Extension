@@ -6,3 +6,6 @@
 
 # Installed Composer packages versions
 /composer.lock
+
+# documentation local build directory
+docs/_build
