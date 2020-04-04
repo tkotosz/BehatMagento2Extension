@@ -43,7 +43,7 @@ For more detailed information see the :doc:`configuration section of this docume
 
 4. Create a feature file in ``features/bootstrap/my_feature.feature``
 
-    .. code-block:: yaml
+    .. code-block:: gherkin
 
         Feature: Magento and Behat DI connected
           As a developer
