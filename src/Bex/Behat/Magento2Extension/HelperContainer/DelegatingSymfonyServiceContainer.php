@@ -21,7 +21,7 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
 
     public function has($id)
     {
-        if (is_null($id)) {
+        if (!$this->isSupportedServiceId($id)) {
             return false;
         }
 
@@ -40,6 +40,10 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
 
     public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {
+        if (!$this->isSupportedServiceId($id)) {
+            return null;
+        }
+
         try {
             return parent::get($id);
         } catch (ServiceNotFoundException $e) {
@@ -83,5 +87,28 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
         }
 
         parent::compile($resolveEnvPlaceholders);
+    }
+
+    private function isSupportedServiceId($id)
+    {
+        if (is_null($id)) {
+            return false;
+        }
+
+        // If the Page Object Extension is used then let it handle the autowiring
+        // @see \SensioLabs\Behat\PageObjectExtension\Context\Argument\PageObjectArgumentResolver::resolveArguments
+        if ($this->isPageObject($id)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isPageObject($id)
+    {
+        return (
+            is_subclass_of($id, '\SensioLabs\Behat\PageObjectExtension\PageObject\Page') ||
+            is_subclass_of($id, '\SensioLabs\Behat\PageObjectExtension\PageObject\Element')
+        );
     }
 }
