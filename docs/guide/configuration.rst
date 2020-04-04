@@ -188,6 +188,7 @@ Unfortunately the custom service container is registered under the same key (see
 But don't worry this extension allows you to register your helper services in a custom Symfony DI container in the following way:
 
 1. Configure the path for the service container configuration file:
+
 .. code-block:: yaml
 
     default:
