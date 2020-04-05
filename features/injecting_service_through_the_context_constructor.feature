@@ -16,6 +16,7 @@ Feature: Injecting service from Magento DI to Behat Context through the construc
 
       use Behat\Behat\Context\Context;
       use Magento\Catalog\Api\ProductRepositoryInterface;
+      use PHPUnit\Framework\Assert;
 
       class FeatureContext implements Context
       {
@@ -32,9 +33,7 @@ Feature: Injecting service from Magento DI to Behat Context through the construc
            */
           public function aServiceHasBeenSuccessfullyInjectedThroughTheContextConstructor()
           {
-              if (!$this->productRepository instanceof ProductRepositoryInterface) {
-                  throw new Exception('Something went wrong :(');
-              }
+              Assert::assertInstanceOf(ProductRepositoryInterface::class, $this->productRepository);
           }
       }
       """
