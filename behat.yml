@@ -1,0 +1,7 @@
+default:
+  suites:
+    default:
+      contexts:
+        - Bex\Behat\Context\TestRunnerContext:
+            workingDirectory: 'magento2-test-env'
+        - Bex\Behat\Magento2Extension\Acceptance\Context\FeatureContext

@@ -41,8 +41,7 @@
             "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
             "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
-            "Bex\\Behat\\Magento2Extension\\": "../m2-behat-extension/src/Bex/Behat/Magento2Extension",
-            "Tkotosz\\Acceptance\\": "../m2-behat-extension/features/bootstrap"
+            "Bex\\Behat\\Magento2Extension\\": "../src/Bex/Behat/Magento2Extension"
         }
     },
     "repositories": [

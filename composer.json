@@ -25,8 +25,9 @@
         "magento/module-backend": "*"
     },
     "require-dev": {
-        "bex/behat-test-runner": "^1.2.1",
-        "phpspec/phpspec": "^2.5"
+        "bex/behat-test-runner": "dev-feature/make-working-dir-configurable",
+        "phpspec/phpspec": "^2.5",
+        "phpunit/phpunit": "^8.5"
     },
     "config": {
         "bin-dir": "bin"
@@ -34,6 +35,11 @@
     "autoload": {
         "psr-0": {
             "Bex\\Behat\\Magento2Extension": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bex\\Behat\\Magento2Extension\\Acceptance\\": "features/bootstrap"
         }
     },
     "repositories": [

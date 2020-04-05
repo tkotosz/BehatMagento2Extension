@@ -55,6 +55,8 @@ SECURITY.md
 .editorconfig
 phpcs.xml
 phpmd.xml
+behat.yml
+/features
 
 # Keep
 

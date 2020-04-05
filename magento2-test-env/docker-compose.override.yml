@@ -2,5 +2,5 @@ version: '3'
 services:
     console:
         volumes:
-            - ../features:/./m2-behat-extension/features
-            - ../src:/./m2-behat-extension/src
+            - ../:/./m2-behat-extension/
+            - ../src:/./src
