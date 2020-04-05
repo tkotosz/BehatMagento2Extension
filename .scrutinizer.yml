@@ -3,13 +3,6 @@ filter:
     - 'src/*'
   dependency_paths:
     - 'vendor/*'
-  excluded_paths:
-    - 'features/bootstrap/*'
-    - 'dev/*'
-    - 'var/*'
-    - 'lib/*'
-    - 'bin/*'
-    - 'vendor/*'
 
 build:
   environment:
