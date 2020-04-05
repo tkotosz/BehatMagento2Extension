@@ -41,9 +41,8 @@ build:
         override:
           - find src/ -type f \( -name '*.phtml' -o -name '*.php' \) | xargs -n 1 -P 8 -i php -l {} | grep -v 'No syntax errors detected' || echo 'OK'
           - php-scrutinizer-run
-          - bin/behat --no-interaction --no-snippets --stop-on-failure --format=pretty
-          - cd magento2-test-env && bin/magento deploy:mode:set production && cd -
-          - bin/behat --no-interaction --no-snippets --stop-on-failure --format=pretty
+          - bin/behat -sdeveloper_mode --no-interaction --no-snippets --stop-on-failure --format=pretty
+          - bin/behat -sprodution_mode --no-interaction --no-snippets --stop-on-failure --format=pretty
 
 build_failure_conditions:
   - 'elements.rating(< A).new.exists'

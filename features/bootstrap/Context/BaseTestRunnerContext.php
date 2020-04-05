@@ -6,7 +6,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Bex\Behat\Context\TestRunnerContext as DefaultTestRunnerContext;
 use Symfony\Component\Process\Process;
 
-class TestRunnerContext extends DefaultTestRunnerContext
+abstract class BaseTestRunnerContext extends DefaultTestRunnerContext
 {
     /** @var string */
     private $modulePath;
@@ -99,7 +99,7 @@ CONTENT;
         $this->runMagentoCommand('cache:clean');
     }
 
-    private function runMagentoCommand(string $command, string $arguments = '')
+    protected function runMagentoCommand(string $command, string $arguments = '')
     {
         $magentoProcess = new Process(
             sprintf('%s %s %s', 'bin/magento', $command, escapeshellarg($arguments)),
