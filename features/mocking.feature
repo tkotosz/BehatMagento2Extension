@@ -3,7 +3,7 @@ Feature: Mocking
   In order to write Behat tests easily
   I should be able to mock some dependencies of the used Magento services
 
-  Scenario: Override dependency using preference
+  Background:
     Given I have a Magento module called "Acme_Awesome"
     And I have an interface "Acme\Awesome\Config\ConfigProviderInterface" defined in this module:
       """
@@ -135,13 +135,6 @@ Feature: Mocking
           }
       }
       """
-    And I have a test Magento DI configuration in this module:
-      """
-      <?xml version="1.0"?>
-      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
-      </config>
-      """
     And I have the feature:
       """
       Feature: Delivery Cost Calculation
@@ -248,6 +241,31 @@ Feature: Mocking
 
         extensions:
           Bex\Behat\Magento2Extension: ~
+      """
+
+  Scenario: Override dependency using preference
+    Given I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
+      </config>
+      """
+    When I run Behat
+    Then I should see the tests passing
+
+  Scenario: Replace dependency with composition
+    Given I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\Awesome\Service\DeliveryCostCalculator">
+              <arguments>
+                  <argument name="deliveryConfig" xsi:type="object">Acme\Awesome\Test\FakeConfigProvider</argument>
+              </arguments>
+          </type>
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
+      </config>
       """
     When I run Behat
     Then I should see the tests passing
