@@ -45,9 +45,9 @@ Feature: Injecting service from Magento DI to Behat Context through the construc
       default:
         suites:
           application:
-            autowire: true
             contexts:
-              - FeatureContext
+              - FeatureContext:
+                - '@Magento\Catalog\Api\ProductRepositoryInterface'
             services: '@bex.magento2_extension.service_container'
 
         extensions:
