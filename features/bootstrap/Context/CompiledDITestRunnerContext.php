@@ -2,11 +2,11 @@
 
 namespace Bex\Behat\Magento2Extension\Acceptance\Context;
 
-class ProductionModeTestRunnerContext extends BaseTestRunnerContext
+class CompiledDITestRunnerContext extends TestRunnerContext
 {
     public function iRunBehat($parameters = '', $phpParameters = '')
     {
-        $this->runMagentoCommand('deploy:mode:set', 'production');
+        $this->runMagentoCommand('setup:di:compile');
         parent::iRunBehat($parameters, $phpParameters);
     }
 }

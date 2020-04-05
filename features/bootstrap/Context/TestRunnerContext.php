@@ -6,7 +6,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Bex\Behat\Context\TestRunnerContext as DefaultTestRunnerContext;
 use Symfony\Component\Process\Process;
 
-abstract class BaseTestRunnerContext extends DefaultTestRunnerContext
+class TestRunnerContext extends DefaultTestRunnerContext
 {
     /** @var string */
     private $modulePath;
@@ -102,7 +102,7 @@ CONTENT;
     protected function runMagentoCommand(string $command, string $arguments = '')
     {
         $magentoProcess = new Process(
-            sprintf('%s %s %s', 'bin/magento', $command, escapeshellarg($arguments)),
+            sprintf('%s %s %s', 'bin/magento', $command, !empty($arguments) ? escapeshellarg($arguments) : ''),
             $this->workingDirectory
         );
         $magentoProcess->run();
