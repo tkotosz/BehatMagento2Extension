@@ -24,8 +24,8 @@ build:
       - composer global require "hirak/prestissimo:^0.3"
 
     override:
-      - { command: 'rm -rf ./vendor && composer install --no-interaction --no-suggest -vv', idle_timeout: 600 }
-      - { command: 'cd magento2-test-env && rm -rf ./vendor && composer install --no-interaction --no-suggest -vv && cd -', idle_timeout: 600 }
+      - { command: 'composer install --no-interaction --no-suggest -vv', idle_timeout: 600 }
+      - { command: 'cd magento2-test-env && composer install --no-interaction --no-suggest -vv && cd -', idle_timeout: 600 }
 
   cache:
     directories: [ ~/.composer/cache ]
