@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b05bab3c185f1b534fcf873b00631a9",
+    "content-hash": "bc2e1fc149001ce04b5516c8781d6fca",
     "packages": [
         {
             "name": "amzn/amazon-pay-and-login-magento-2-module",
@@ -13079,6 +13079,48 @@
                 "OSL-3.0"
             ],
             "description": "Temando multi-carrier shipping extension for Magento 2"
+        },
+        {
+            "name": "tkotosz/test-area-magento2",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tkotosz/test-area-magento2.git",
+                "reference": "21eb50bdafdfa8c539594101c14b53eaa54a7b26"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tkotosz/test-area-magento2/zipball/21eb50bdafdfa8c539594101c14b53eaa54a7b26",
+                "reference": "21eb50bdafdfa8c539594101c14b53eaa54a7b26",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": "*",
+                "php": ">=7.1"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "src/Tkotosz/TestArea/registration.php"
+                ],
+                "psr-0": {
+                    "Tkotosz\\TestArea\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tibor Kotosz",
+                    "email": "kotosy@gmail.com",
+                    "homepage": "https://github.com/tkotosz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tkotosz - Test Area Magento 2",
+            "time": "2019-04-18T13:58:09+00:00"
         },
         {
             "name": "true/punycode",
