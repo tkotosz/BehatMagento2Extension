@@ -57,6 +57,7 @@ phpcs.xml
 phpmd.xml
 behat.yml
 /features
+/app/code
 
 # Keep
 
