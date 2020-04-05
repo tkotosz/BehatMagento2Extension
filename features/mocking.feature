@@ -86,13 +86,6 @@ Feature: Mocking
           }
       }
       """
-    And I have a global Magento DI configuration in this module:
-      """
-      <?xml version="1.0"?>
-      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Config\ConfigProvider" />
-      </config>
-      """
     And I have a class "Acme\Awesome\Test\FakeConfigProvider" defined in this module:
       """
       <?php
@@ -227,6 +220,22 @@ Feature: Mocking
           }
       }
       """
+
+  Scenario: Override global service dependency using preference
+    Given I have a global Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Config\ConfigProvider" />
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
+      </config>
+      """
     And I have the configuration:
       """
       default:
@@ -242,20 +251,18 @@ Feature: Mocking
         extensions:
           Bex\Behat\Magento2Extension: ~
       """
-
-  Scenario: Override dependency using preference
-    Given I have a test Magento DI configuration in this module:
-      """
-      <?xml version="1.0"?>
-      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
-      </config>
-      """
     When I run Behat
     Then I should see the tests passing
 
-  Scenario: Replace dependency with composition
-    Given I have a test Magento DI configuration in this module:
+  Scenario: Replace global service dependency with composition
+    Given I have a global Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Config\ConfigProvider" />
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
       """
       <?xml version="1.0"?>
       <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -265,6 +272,91 @@ Feature: Mocking
               </arguments>
           </type>
       </config>
+      """
+    And I have the configuration:
+      """
+      default:
+        suites:
+          application:
+            autowire: true
+            contexts:
+              - FeatureContext
+            services: '@bex.magento2_extension.service_container'
+            magento:
+              area: test
+
+        extensions:
+          Bex\Behat\Magento2Extension: ~
+      """
+    When I run Behat
+    Then I should see the tests passing
+
+  Scenario: Override frontend service dependency using preference
+    Given I have a frontend Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Config\ConfigProvider" />
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
+      </config>
+      """
+    And I have the configuration:
+      """
+      default:
+        suites:
+          application:
+            autowire: true
+            contexts:
+              - FeatureContext
+            services: '@bex.magento2_extension.service_container'
+            magento:
+              area: [frontend, test]
+
+        extensions:
+          Bex\Behat\Magento2Extension: ~
+      """
+    When I run Behat
+    Then I should see the tests passing
+
+  Scenario: Replace frontend service dependency with composition
+    Given I have a frontend Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Config\ConfigProvider" />
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\Awesome\Service\DeliveryCostCalculator">
+              <arguments>
+                  <argument name="deliveryConfig" xsi:type="object">Acme\Awesome\Test\FakeConfigProvider</argument>
+              </arguments>
+          </type>
+      </config>
+      """
+    And I have the configuration:
+      """
+      default:
+        suites:
+          application:
+            autowire: true
+            contexts:
+              - FeatureContext
+            services: '@bex.magento2_extension.service_container'
+            magento:
+              area: [frontend, test]
+
+        extensions:
+          Bex\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing

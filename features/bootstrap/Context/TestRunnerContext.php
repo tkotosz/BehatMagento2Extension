@@ -86,6 +86,20 @@ CONTENT;
     }
 
     /**
+     * @Given I have a frontend Magento DI configuration in this module:
+     */
+    public function iHaveAFrontendMagentoDIConfigurationInThisModule(PyStringNode $content)
+    {
+        $file = $this->modulePath . '/etc/frontend/di.xml';
+
+        $this->filesystem->dumpFile($file, $content->getRaw());
+
+        $this->files[] = $file;
+
+        $this->runMagentoCommand('cache:clean');
+    }
+
+    /**
      * @Given I have a test Magento DI configuration in this module:
      */
     public function iHaveATestMagentoDiConfigurationInThisModule(PyStringNode $content)
