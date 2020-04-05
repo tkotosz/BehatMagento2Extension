@@ -22,12 +22,10 @@ build:
     before:
       - sed -i 's/zend_extension_ts=xdebug.so/;zend_extension_ts=xdebug.so/' ~/.phpenv/versions/$(phpenv global)/etc/php.ini
       - composer global require "hirak/prestissimo:^0.3"
-      - mkdir -p bin
-      - test -f bin/composer.phar || (wget "https://getcomposer.org/composer.phar" -O bin/composer.phar && chmod +x bin/composer.phar)
 
     override:
-      - { command: 'rm -rf ./vendor && bin/composer.phar install --no-interaction --no-suggest -vv', idle_timeout: 600 }
-      - { command: 'cd magento2-test-env && rm -rf ./vendor && bin/composer.phar install --no-interaction --no-suggest -vv && cd -', idle_timeout: 600 }
+      - { command: 'rm -rf ./vendor && composer install --no-interaction --no-suggest -vv', idle_timeout: 600 }
+      - { command: 'cd magento2-test-env && rm -rf ./vendor && composer install --no-interaction --no-suggest -vv && cd -', idle_timeout: 600 }
 
   cache:
     directories: [ ~/.composer/cache ]
@@ -42,7 +40,6 @@ build:
           - echo mysql-server mysql-server/root_password_again password root | sudo debconf-set-selections
           - sudo apt-get install -y mysql-server-core-5.6 mysql-server-5.6
           - ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
-          - rm -rf generated/* var/*
           - mysql -uroot -proot -e "create database magento"
           - bin/magento setup:install --admin-email "kotosy.magento@gmail.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123" --admin-user "admin" --backend-frontname admin --base-url "http://magento.test" --db-host 127.0.0.1 --db-name magento --db-user root --db-password root --session-save files --use-rewrites 1 --use-secure 0 -vvv
           - bin/magento setup:upgrade
