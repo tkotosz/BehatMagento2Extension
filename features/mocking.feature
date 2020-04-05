@@ -264,7 +264,6 @@ Feature: Mocking
                   <argument name="deliveryConfig" xsi:type="object">Acme\Awesome\Test\FakeConfigProvider</argument>
               </arguments>
           </type>
-          <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
       </config>
       """
     When I run Behat
