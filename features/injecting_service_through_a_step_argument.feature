@@ -3,7 +3,7 @@ Feature: Injecting service from Magento DI to Behat Context through a Behat Step
   In order to write Behat tests easily
   I should be able to inject services from the Magento DI into Behat Contexts through a Behat Step argument
 
-  Scenario: Manually Injecting service from Magento DI
+  Scenario: Automatically Injecting service from Magento DI to a Behat Step
     Given I have the feature:
       """
       Feature: My awesome feature
