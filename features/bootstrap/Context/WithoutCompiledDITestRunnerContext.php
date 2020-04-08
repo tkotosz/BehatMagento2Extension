@@ -2,11 +2,11 @@
 
 namespace Bex\Behat\Magento2Extension\Acceptance\Context;
 
-class CompiledDITestRunnerContext extends TestRunnerContext
+class WithoutCompiledDITestRunnerContext extends TestRunnerContext
 {
     public function iRunBehat($parameters = '', $phpParameters = '')
     {
-        $this->runMagentoCommand('setup:di:compile');
+        $this->runMagentoCommand('cache:clear');
         parent::iRunBehat($parameters, $phpParameters);
     }
 }

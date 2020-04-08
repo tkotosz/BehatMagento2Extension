@@ -6,7 +6,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Bex\Behat\Context\TestRunnerContext as DefaultTestRunnerContext;
 use Symfony\Component\Process\Process;
 
-class TestRunnerContext extends DefaultTestRunnerContext
+abstract class TestRunnerContext extends DefaultTestRunnerContext
 {
     /** @var string */
     private $modulePath;
@@ -111,8 +111,6 @@ CONTENT;
         $this->filesystem->dumpFile($file, $content->getRaw());
 
         $this->files[] = $file;
-
-        $this->runMagentoCommand('cache:clean');
     }
 
     /**
@@ -125,8 +123,6 @@ CONTENT;
         $this->filesystem->dumpFile($file, $content->getRaw());
 
         $this->files[] = $file;
-
-        $this->runMagentoCommand('cache:clean');
     }
 
     /**
@@ -139,8 +135,6 @@ CONTENT;
         $this->filesystem->dumpFile($file, $content->getRaw());
 
         $this->files[] = $file;
-
-        $this->runMagentoCommand('cache:clean');
     }
 
     protected function runMagentoCommand(string $command, string $arguments = '')
