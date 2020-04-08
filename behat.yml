@@ -1,0 +1,11 @@
+default:
+  suites:
+    without_compiled_di:
+      contexts:
+        - Bex\Behat\Magento2Extension\Acceptance\Context\WithoutCompiledDITestRunnerContext:
+            workingDirectory: 'magento2-test-env'
+
+    with_compiled_di:
+      contexts:
+        - Bex\Behat\Magento2Extension\Acceptance\Context\WithCompiledDITestRunnerContext:
+            workingDirectory: 'magento2-test-env'

@@ -7,7 +7,7 @@ Given you have an application service interface like this:
 
     <?php
 
-    namespace Vendor\ModuleName\Config;
+    namespace Acme\Awesome\Config;
 
     interface ConfigProviderInterface
     {
@@ -22,7 +22,7 @@ And you have an implementation for this service:
 
     <?php
 
-    namespace Vendor\ModuleName\Config;
+    namespace Acme\Awesome\Config;
 
     use Magento\Framework\App\Config\ScopeConfigInterface;
 
@@ -51,7 +51,10 @@ And you have the following DI config to mark this implementation as the default 
 
 .. code-block:: xml
 
-    <preference for="Vendor\ModuleName\Config\ConfigProviderInterface" type="Vendor\ModuleName\Config\ConfigProvider" />
+    <?xml version="1.0"?>
+    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+        <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Config\ConfigProvider" />
+    </config>
 
 In addition to these you have an application service which depends on this config interface, e.g.:
 
@@ -59,11 +62,11 @@ In addition to these you have an application service which depends on this confi
 
     <?php
 
-    namespace Vendor\ModuleName\Service;
+    namespace Acme\Awesome\Service;
 
-    use Magento\Quote\Model\Quote;
+    use Acme\Awesome\Config\ConfigProviderInterface;
 
-    class DeliveryCostCalculator implements DeliveryCostCalculatorInterface
+    class DeliveryCostCalculator
     {
         private const DELIVERY_COST = 5.0;
 
@@ -75,21 +78,26 @@ In addition to these you have an application service which depends on this confi
             $this->deliveryConfig = $deliveryConfig;
         }
 
-        public function calculate(Quote $quote): float
+        public function calculate(float $total): float
+        {
+            if ($this->isFreeDelivery($total)) {
+                return 0.0;
+            }
+
+            return self::DELIVERY_COST;
+        }
+
+        private function isFreeDelivery(float $total): bool
         {
             if (!$this->deliveryConfig->isFreeDeliverEnabled()) {
-                return self::DELIVERY_COST;
+                return false;
             }
 
-            if ($quote->getGrandTotal() < $this->deliveryConfig->getFreeDeliveryThreshold()) {
-                return self::DELIVERY_COST;
-            }
-
-            return 0.0;
+            return $total >= $this->deliveryConfig->getFreeDeliveryThreshold();
         }
     }
 
-When you write your application tests, if you would like to avoid relying on the database, then you either need to mock ``Magento\Framework\App\Config\ScopeConfigInterface`` or ``Vendor\ModuleName\Config\ConfigProviderInterface``. Lets assume we would like to mock our own ``ConfigProviderInterface`` this time.
+When you write your application tests, if you would like to avoid relying on the database, then you either need to mock ``Magento\Framework\App\Config\ScopeConfigInterface`` or ``Acme\Awesome\Config\ConfigProviderInterface``. Lets assume we would like to mock our own ``ConfigProviderInterface`` this time.
 
 First of all we need to configure a ``test`` area in Magento.
 We can do this by adding the following to the module's global ``etc/di.xml``:
@@ -117,10 +125,10 @@ It will look like this:
 
     <?xml version="1.0"?>
     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-        <preference for="Vendor\ModuleName\Config\ConfigProviderInterface" type="Vendor\ModuleName\Test\FakeConfigProvider" />
+        <preference for="Acme\Awesome\Config\ConfigProviderInterface" type="Acme\Awesome\Test\FakeConfigProvider" />
     </config>
 
-And we are done. After a cache clear everything should be ready to use. If you inject the ``Vendor\ModuleName\Service\DeliveryCostCalculator`` into your Behat Context then it will use the ``Vendor\ModuleName\Test\FakeConfigProvider`` which we can freely modify in our tests.
+And we are done. After a cache clear everything should be ready to use. If you inject the ``Acme\Awesome\Service\DeliveryCostCalculator`` into your Behat Context then it will use the ``Acme\Awesome\Test\FakeConfigProvider`` which we can freely modify in our tests.
 
 E.g.:
 
@@ -130,9 +138,9 @@ E.g.:
 
     <?php
 
-    namespace Vendor\ModuleName\Test;
+    namespace Acme\Awesome\Test;
 
-    use Magento\Framework\App\Config\ScopeConfigInterface;
+    use Acme\Awesome\Config\ConfigProviderInterface;
 
     class FakeConfigProvider implements ConfigProviderInterface
     {
@@ -149,7 +157,7 @@ E.g.:
 
         public function getFreeDeliveryThreshold(): float
         {
-            return (float) $this->freeDeliveryThreshold;
+            return $this->freeDeliveryThreshold;
         }
 
         public function enableFreeDelivery(): void
@@ -168,22 +176,44 @@ E.g.:
         }
     }
 
-**DeliveryContext:**
+**Feature:**
+
+.. code-block:: gherkin
+
+  Feature: Delivery Cost Calculation
+
+    Scenario: Standard Delivery applies when under the configured threshold
+      Given The the cart total is "98.99"
+      And The free delivery is enabled
+      And The free delivery cost threshold is configured to "100"
+      When The delivery total is calculated
+      Then The delivery cost is "5.0"
+
+    Scenario: Free Delivery applies when above the configured threshold
+      Given The the cart total is "120"
+      And The free delivery is enabled
+      And The free delivery cost threshold is configured to "100"
+      When The delivery total is calculated
+      Then The delivery cost is "0.0"
+
+**Feature Context:**
 
 .. code-block:: php
 
     <?php
 
     use Behat\Behat\Context\Context;
-    use Behat\Gherkin\Node\TableNode;
-    use Exception;
-    use Vendor\ModuleName\Service\DeliveryCostCalculator;
-    use Vendor\ModuleName\Test\FakeConfigProvider;
+    use Acme\Awesome\Service\DeliveryCostCalculator;
+    use Acme\Awesome\Test\FakeConfigProvider;
+    use PHPUnit\Framework\Assert;
 
-    class DeliveryContext implements Context
+    class FeatureContext implements Context
     {
         /** @var DeliveryCostCalculator */
         private $deliveryCostCalculator;
+
+        /** @type float|null */
+        private $cartTotal = null;
 
         /** @type float|null */
         private $deliveryCost = null;
@@ -194,12 +224,11 @@ E.g.:
         }
 
         /**
-         * @Given The cart contains the following items:
+         * @Given The the cart total is :total
          */
-        public function theCartContainsTheFollowingItems(TableNode $table)
+        public function theCartContainsTheFollowingItems(float $total)
         {
-            // Create a Cart here
-            // $this->currentQuote = ...
+            $this->cartTotal = $total;
         }
 
         /**
@@ -227,11 +256,11 @@ E.g.:
         }
 
         /**
-         * @When The delivery cost is calculated
+         * @When The delivery total is calculated
          */
-        public function theDeliveryCostIsCalculated()
+        public function theDeliveryTotalIsCalculated()
         {
-            $this->deliveryCost = $this->deliveryCostCalculator->calculate($this->currentQuote);
+            $this->deliveryCost = $this->deliveryCostCalculator->calculate($this->cartTotal);
         }
 
         /**
@@ -239,12 +268,6 @@ E.g.:
          */
         public function theDeliveryCostIs(float $expectedDeliveryCost)
         {
-            if ($expectedDeliveryCost !== $this->deliveryCost) {
-                throw new Exception(
-                    spritf('Delivery cost expected to be %s but got %s', $expectedDeliveryCost, $this->deliveryCost)
-                );
-            }
+            Assert::assertEquals($expectedDeliveryCost, $this->deliveryCost);
         }
     }
-
-The above context is not complete, it is just an example to show how easy to mock the dependencies this way.
