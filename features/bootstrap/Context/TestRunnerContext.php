@@ -137,6 +137,30 @@ CONTENT;
         $this->files[] = $file;
     }
 
+    /**
+     * @Given I have the helper service configuration:
+     */
+    public function iHaveTheHelperServiceConfiguration(PyStringNode $content)
+    {
+        $file = $this->workingDirectory . '/features/bootstrap/config/services.yml';
+
+        $this->filesystem->dumpFile($file, $content->getRaw());
+
+        $this->files[] = $file;
+    }
+
+    /**
+     * @Given /^the behat helper service class file "([^"]*)" contains:$/
+     */
+    public function theBehatHelperServiceClassFileContains(string $className, PyStringNode $content)
+    {
+        $file = $this->workingDirectory . '/features/bootstrap/' . str_replace('\\', '/', $className) . '.php';
+
+        $this->filesystem->dumpFile($file, $content->getRaw());
+
+        $this->files[] = $file;
+    }
+
     protected function runMagentoCommand(string $command, string $arguments = '')
     {
         $magentoProcess = new Process(

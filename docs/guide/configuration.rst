@@ -208,7 +208,11 @@ Define your helper services in the servies configuration file which you created 
       _defaults:
         public: true
       
-      SharedService: ~
+      SharedService:
+        class: SharedService
+
+Note: The "class" property under the service name only required if the class is in the global namespace. So if you use namespaces then you can simply declare your service like this: ``Acme\Service\SharedService: ~``.
+For more information see the official documentation of the `Symfony DI component <https://symfony.com/doc/current/components/dependency_injection.html>`_.
 
 3. Inject your helper service into your Behat Context:
 
@@ -239,9 +243,11 @@ You can simply do this in the following way:
       _defaults:
         public: true
         
-      AnotherSharedService: ~
+      AnotherSharedService:
+        class: AnotherSharedService
 
       SharedService:
+        class: SharedService
         arguments: ['@AnotherSharedService']
 
 In addition to this the extension gives you access to any service defined in the default Behat service container or in the Magento DI. Which means you can inject any service defined by the Behat application itself or by any Behat extension or by Magento into your helper services.
@@ -252,9 +258,11 @@ In addition to this the extension gives you access to any service defined in the
       _defaults:
         public: true
         
-      AnotherSharedService: ~
+      AnotherSharedService:
+        class: AnotherSharedService
 
       SharedService:
+        class: SharedService
         arguments:
           - '@AnotherSharedService'
           - '@Magento\Sales\Api\OrderRepositoryInterface'
@@ -284,9 +292,11 @@ You can enable this feature by adding the ``autowire: true`` configuration to yo
         public: true
         autowire: true
 
-      AnotherSharedService: ~
+      AnotherSharedService:
+        class: AnotherSharedService
 
       SharedService:
+        class: SharedService
         arguments:
           $mink: '@mink'
           $basePath: '%paths.base%'
