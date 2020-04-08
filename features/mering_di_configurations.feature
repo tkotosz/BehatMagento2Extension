@@ -216,3 +216,164 @@ Feature: Merging DI configurations
       """
     When I run Behat
     Then I should see the tests passing
+
+  Scenario: Merging adminhtml and test area correctly
+    Given I have an adminhtml Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\FooBar\Service\FooBar">
+              <arguments>
+                  <argument name="foo" xsi:type="object">Acme\FooBar\Service\Foo</argument>
+                  <argument name="bar" xsi:type="object">Acme\FooBar\Service\Bar</argument>
+              </arguments>
+          </type>
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\FooBar\Service\FooBar">
+              <arguments>
+                  <argument name="foo" xsi:type="object">Acme\FooBar\Test\Service\FakeFoo</argument>
+              </arguments>
+          </type>
+      </config>
+      """
+    And I have the feature:
+    """
+    Feature: FooBar
+
+      Scenario: Fake Foo with Real Bar
+        Given The foo service is "Acme\FooBar\Test\Service\FakeFoo"
+        And The bar service is "Acme\FooBar\Service\Bar"
+        Then The merge is correct
+    """
+    And I have the configuration:
+      """
+      default:
+        suites:
+          application:
+            autowire: true
+            contexts:
+              - FeatureContext
+            services: '@bex.magento2_extension.service_container'
+            magento:
+              area: [adminhtml, test]
+
+        extensions:
+          Bex\Behat\Magento2Extension: ~
+      """
+    When I run Behat
+    Then I should see the tests passing
+
+  Scenario: Preserving global configuration when merging multiple areas
+    Given I have a global Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\FooBar\Service\BarInterface" type="Acme\FooBar\Service\Bar" />
+      </config>
+      """
+    And I have an adminhtml Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\FooBar\Service\FooBar">
+              <arguments>
+                  <argument name="foo" xsi:type="object">Acme\FooBar\Service\Foo</argument>
+              </arguments>
+          </type>
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\FooBar\Service\FooBar">
+              <arguments>
+                  <argument name="foo" xsi:type="object">Acme\FooBar\Test\Service\FakeFoo</argument>
+              </arguments>
+          </type>
+      </config>
+      """
+    And I have the feature:
+    """
+    Feature: FooBar
+
+      Scenario: Fake Foo with Real Bar
+        Given The foo service is "Acme\FooBar\Test\Service\FakeFoo"
+        And The bar service is "Acme\FooBar\Service\Bar"
+        Then The merge is correct
+    """
+    And I have the configuration:
+      """
+      default:
+        suites:
+          application:
+            autowire: true
+            contexts:
+              - FeatureContext
+            services: '@bex.magento2_extension.service_container'
+            magento:
+              area: [adminhtml, test]
+
+        extensions:
+          Bex\Behat\Magento2Extension: ~
+      """
+    When I run Behat
+    Then I should see the tests passing
+
+  Scenario: Overriding global fallback configuration when merging multiple areas
+    Given I have a global Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\FooBar\Service\FooInterface" type="Acme\FooBar\Service\Foo" />
+      </config>
+      """
+    And I have an adminhtml Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <type name="Acme\FooBar\Service\FooBar">
+              <arguments>
+                  <argument name="bar" xsi:type="object">Acme\FooBar\Service\Bar</argument>
+              </arguments>
+          </type>
+      </config>
+      """
+    And I have a test Magento DI configuration in this module:
+      """
+      <?xml version="1.0"?>
+      <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+          <preference for="Acme\FooBar\Service\FooInterface" type="Acme\FooBar\Test\Service\FakeFoo" />
+      </config>
+      """
+    And I have the feature:
+    """
+    Feature: FooBar
+
+      Scenario: Fake Foo with Real Bar
+        Given The foo service is "Acme\FooBar\Test\Service\FakeFoo"
+        And The bar service is "Acme\FooBar\Service\Bar"
+        Then The merge is correct
+    """
+    And I have the configuration:
+      """
+      default:
+        suites:
+          application:
+            autowire: true
+            contexts:
+              - FeatureContext
+            services: '@bex.magento2_extension.service_container'
+            magento:
+              area: [adminhtml, test]
+
+        extensions:
+          Bex\Behat\Magento2Extension: ~
+      """
+    When I run Behat
+    Then I should see the tests passing

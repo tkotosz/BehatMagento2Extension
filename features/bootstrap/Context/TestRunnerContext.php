@@ -100,6 +100,20 @@ CONTENT;
     }
 
     /**
+     * @Given I have an adminhtml Magento DI configuration in this module:
+     */
+    public function iHaveAnAdminhtmlMagentoDIConfigurationInThisModule(PyStringNode $content)
+    {
+        $file = $this->modulePath . '/etc/adminhtml/di.xml';
+
+        $this->filesystem->dumpFile($file, $content->getRaw());
+
+        $this->files[] = $file;
+
+        $this->runMagentoCommand('cache:clean');
+    }
+
+    /**
      * @Given I have a test Magento DI configuration in this module:
      */
     public function iHaveATestMagentoDiConfigurationInThisModule(PyStringNode $content)
