@@ -167,6 +167,7 @@ CONTENT;
             sprintf('%s %s %s', 'bin/magento', $command, !empty($arguments) ? escapeshellarg($arguments) : ''),
             $this->workingDirectory
         );
+        $magentoProcess->setTimeout(120);
         $magentoProcess->run();
     }
 }
