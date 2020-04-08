@@ -19,6 +19,22 @@ class TestRunnerContext extends DefaultTestRunnerContext
         $this->iShouldNotSeeAFailingTest();
     }
 
+    public function createWorkingDirectory()
+    {
+        parent::createWorkingDirectory();
+
+        $this->filesystem->copy($this->workingDirectory . '/app/etc/config.php', '/tmp/config.php.backup', true);
+    }
+
+    public function clearWorkingDirectory()
+    {
+        parent::clearWorkingDirectory();
+
+        $this->filesystem->copy('/tmp/config.php.backup', $this->workingDirectory . '/app/etc/config.php', true);
+        $this->filesystem->remove('/tmp/config.php.backup');
+        $this->runMagentoCommand('cache:clear');
+    }
+
     /**
      * @Given I have a Magento module called :moduleName
      */
