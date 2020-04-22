@@ -9,10 +9,10 @@ Requirements
 * Magento 2 2.2+
 
 Using Composer
-----------------
+--------------
 
 The recommended installation method is through `Composer <https://getcomposer.org>`_:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-      $ composer require --dev bex/behat-magento2-extension
+    $ composer require --dev bex/behat-magento2-extension
