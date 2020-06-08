@@ -175,6 +175,24 @@ E.g.:
             $this->freeDeliveryThreshold = $threshold;
         }
     }
+    
+    In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
+
+.. code-block:: yaml
+
+    default:
+      suites:
+        yoursuite:
+          autowire: true
+          
+          contexts:
+            - YourContext
+          
+          services: '@bex.magento2_extension.service_container'
+          
+          magento:
+            area: test
+
 
 **Feature:**
 
