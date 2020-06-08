@@ -175,8 +175,9 @@ E.g.:
             $this->freeDeliveryThreshold = $threshold;
         }
     }
-    
-    In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
+
+**behat.yml:**
+In order to load this custom DI configuration during the test run the test area need to be configured in the Behat test suite so it can load to merge it with the default area.
 
 .. code-block:: yaml
 
