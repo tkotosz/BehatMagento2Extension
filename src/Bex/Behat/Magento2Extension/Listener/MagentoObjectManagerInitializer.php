@@ -73,7 +73,8 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
 
-        $config = $configLoader->load(Area::AREA_GLOBAL);
+        $mainArea = array_shift($areas);
+        $config = $configLoader->load($mainArea);
         foreach ($areas as $area) {
             $config = array_replace_recursive(
                 $config,
@@ -86,9 +87,8 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $magentoObjectManager->configure($config);
 
-        $baseArea = array_shift($areas);
         $appState = $magentoObjectManager->get(State::class);
-        $appState->setAreaCode($baseArea);
+        $appState->setAreaCode($mainArea);
 
         // TODO can we remove this?
         if ($appState->getAreaCode() === Area::AREA_ADMINHTML) {
