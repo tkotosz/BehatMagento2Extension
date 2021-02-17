@@ -245,7 +245,7 @@ In order to load this custom DI configuration during the test run the test area 
         /**
          * @Given The the cart total is :total
          */
-        public function theCartContainsTheFollowingItems(float $total)
+        public function theCartTotalIs(float $total)
         {
             $this->cartTotal = $total;
         }

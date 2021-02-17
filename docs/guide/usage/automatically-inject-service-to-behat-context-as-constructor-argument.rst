@@ -27,7 +27,7 @@ You can enable the `Behat service autowiring feature <https://github.com/Behat/B
     use Exception;
     use Magento\Catalog\Api\ProductRepositoryInterface;
 
-    class FeatureContext implements Context
+    class YourContext implements Context
     {
         /** @var ProductRepositoryInterface */
         private $productRepository;
