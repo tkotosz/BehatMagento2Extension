@@ -1,6 +1,0 @@
-version: '3'
-services:
-    console:
-        volumes:
-            - ../:/./m2-behat-extension/
-            - ../src:/./src

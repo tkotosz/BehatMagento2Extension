@@ -3,13 +3,23 @@
 namespace Bex\Behat\Magento2Extension\Acceptance\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
+use Bex\Behat\Context\Services\ProcessFactory;
 use Bex\Behat\Context\TestRunnerContext as DefaultTestRunnerContext;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 abstract class TestRunnerContext extends DefaultTestRunnerContext
 {
     /** @var string */
     private $modulePath;
+
+    public function __construct(
+        $browserCommand = null,
+        Filesystem $fileSystem = null,
+        ProcessFactory $processFactory = null
+    ) {
+        parent::__construct($browserCommand, $fileSystem, $processFactory, getenv('M2_INSTANCE_ROOT_DIR'));
+    }
 
     /**
      * @Then I should see the tests passing

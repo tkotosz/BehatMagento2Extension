@@ -1,0 +1,102 @@
+name: "Acceptance Tests"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "master"
+      - "2.x"
+      - "3.x"
+
+jobs:
+  behat:
+    name: "Behat"
+
+    runs-on: "ubuntu-latest"
+
+    env:
+      M2_INSTANCE_ROOT_DIR: ${{ github.workspace }}/magento
+
+    services:
+      mysql:
+        image: mariadb:10.4
+        env:
+          MYSQL_USER: magento
+          MYSQL_PASSWORD: magento
+          MYSQL_DATABASE: magentodb
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
+
+      elasticsearch:
+        image: elasticsearch:7.12.1
+        env:
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+          discovery.type: single-node
+        ports:
+          - 9200:9200
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+        with:
+          path: 'behat-magento2-extension'
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: none
+          php-version: 7.4
+          extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip, sockets
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+
+      - name: "Setup Composer Auth"
+        run: "echo $COMPOSER_AUTH_JSON > ~/.composer/auth.json"
+        env:
+          COMPOSER_AUTH_JSON: ${{ secrets.COMPOSER_AUTH_JSON }}
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v2"
+        with:
+          path: |
+            ~/.composer/cache
+            magento
+          key: "magento-2.4.2-with-php-7.4"
+
+      - name: "Create Magento 2.4.2 project with testing dependencies"
+        run: |
+          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.2 magento
+          cd magento
+          composer require tkotosz/test-area-magento2
+          composer require --dev behat/behat friends-of-behat/mink-extension behat/mink-goutte-driver
+          cd -
+        if: hashFiles('magento/composer.json') == ''
+
+      - name: "Install Magento"
+        run: |
+          rm -f app/etc/env.php
+          mkdir -p pub/static pub/media
+          bin/magento setup:install --admin-email "kotosy.magento@gmail.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123" --admin-user "admin" --backend-frontname admin --base-url "http://magento.test" --db-host 127.0.0.1 --db-name magentodb --db-user magento --db-password magento --session-save files --use-rewrites 1 --use-secure 0 --search-engine=elasticsearch7 --elasticsearch-host=127.0.0.1 --elasticsearch-port=9200 -vvv
+          bin/magento setup:upgrade
+        working-directory: 'magento'
+
+      - name: "Install Behat Magento 2 Extension in the Magento 2 Test Environment"
+        run: |
+          composer config repositories.behat-m2-extension path ../behat-magento2-extension
+          composer require --dev bex/behat-magento2-extension:@dev
+        working-directory: 'magento'
+
+      - name: "Install Behat Magento 2 Extension's testing dependencies"
+        run: |
+          composer install
+        working-directory: 'behat-magento2-extension'
+
+      - name: "Run tests without compiled DI"
+        run: "bin/behat -swithout_compiled_di"
+        working-directory: 'behat-magento2-extension'
+
+      - name: "Run tests with compiled DI"
+        run: "bin/behat -swith_compiled_di"
+        working-directory: 'behat-magento2-extension'

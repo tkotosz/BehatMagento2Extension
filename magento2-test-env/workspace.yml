@@ -1,6 +1,0 @@
-workspace('magento2-test-env'):
-  description: Magento 2 test env
-  harness: inviqa/magento2
-
-attribute('magento.username'): '= decrypt("YTozOntpOjA7czo3OiJkZWZhdWx0IjtpOjE7czoyNDoi3h2denH1/HDtDYljA1uRSSU7JQABMm8BIjtpOjI7czo0ODoi6UFu+tI8Qjy0rOJXj02R/edXorCm++fGkHesnHusFmWfmv5BEJe/Mtc7wsBqKoAzIjt9")'
-attribute('magento.password'): '= decrypt("YTozOntpOjA7czo3OiJkZWZhdWx0IjtpOjE7czoyNDoiqC81K1KQJUDcu90DGNQpmZ5ImRueRTPGIjtpOjI7czo0ODoi2TkUlX9+Mb4vvvJhtiiCP1TVqR3ONwUT9TM+EgBlRQwJqQ29gsIMBLdl+1/waenvIjt9")'
