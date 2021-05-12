@@ -8,12 +8,12 @@ class Config
     const CONFIG_KEY_SERVICES = 'services';
 
     private string $magentoBootstrapPath;
-    private string $servicesPath;
+    private ?string $servicesPath;
 
     public function __construct(array $config)
     {
-        $this->magentoBootstrapPath = (string) $config[self::CONFIG_KEY_MAGENTO_BOOTSTRAP];
-        $this->servicesPath = (string) $config[self::CONFIG_KEY_SERVICES];
+        $this->magentoBootstrapPath = $config[self::CONFIG_KEY_MAGENTO_BOOTSTRAP];
+        $this->servicesPath = $config[self::CONFIG_KEY_SERVICES];
     }
 
     public function getMagentoBootstrapPath(): string
