@@ -2,16 +2,13 @@
 
 namespace Bex\Behat\Magento2Extension\HelperContainer;
 
-use Interop\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyServiceContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
-class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implements ContainerInterface
+class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer
 {
-    /**
-     * @var SymfonyServiceContainer[]
-     */
-    private $fallbackContainers;
+    /** @var SymfonyServiceContainer[] */
+    private array $fallbackContainers;
 
     public function __construct(array $symfonyServiceContainers)
     {

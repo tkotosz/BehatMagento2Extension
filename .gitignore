@@ -9,3 +9,6 @@
 
 # documentation local build directory
 docs/_build
+
+# ignore composer auth file
+auth.json

@@ -1,8 +1,8 @@
 {
     "name": "bex/behat-magento2-extension",
     "type": "behat-extension",
-    "description": "Magento2 extension for Behat",
-    "keywords": ["magento", "magento2", "tdd","bdd","behat"],
+    "description": "Magento 2 extension for Behat",
+    "keywords": ["magento","magento2","tdd","bdd","behat"],
     "homepage": "https://github.com/tkotosz/BehatMagento2Extension",
     "license": "MIT",
     "authors": [
@@ -14,26 +14,19 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "behat/behat": "^3.5.0",
-        "magento/framework": ">=100.1",
-        "container-interop/container-interop": "^1.2",
-        "symfony/dependency-injection": ">=2.0",
-        "symfony/event-dispatcher": ">=2.0",
-        "magento/module-authorization": "*",
-        "magento/module-user": "*",
-        "magento/module-backend": "*"
+        "php": ">=7.4",
+        "behat/behat": "^3.8",
+        "magento/framework": "^103.0",
+        "symfony/event-dispatcher": "^4.4 || ^5.0",
+        "symfony/dependency-injection": "^4.4 || ^5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "bex/behat-test-runner": "dev-master"
     },
-    "config": {
-        "bin-dir": "bin"
-    },
     "autoload": {
-        "psr-0": {
-            "Bex\\Behat\\Magento2Extension": "src/"
+        "psr-4": {
+            "Bex\\Behat\\Magento2Extension\\": "src/Bex/Behat/Magento2Extension"
         }
     },
     "autoload-dev": {

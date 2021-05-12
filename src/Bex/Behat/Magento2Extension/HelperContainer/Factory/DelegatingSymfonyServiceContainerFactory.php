@@ -4,6 +4,7 @@ namespace Bex\Behat\Magento2Extension\HelperContainer\Factory;
 
 use Bex\Behat\Magento2Extension\HelperContainer\DelegatingSymfonyServiceContainer;
 use Bex\Behat\Magento2Extension\ServiceContainer\Config;
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
@@ -13,16 +14,14 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class DelegatingSymfonyServiceContainerFactory
 {
-    /**
-     * @var string
-     */
-    private $basePath;
+    private string $basePath;
 
     public function __construct(string $basePath)
     {
         $this->basePath = $basePath;
     }
 
+    /** @throws Exception */
     public function create(Config $config, array $symfonyServiceContainers): DelegatingSymfonyServiceContainer
     {
         $container = new DelegatingSymfonyServiceContainer($symfonyServiceContainers);

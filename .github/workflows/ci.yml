@@ -94,9 +94,9 @@ jobs:
         working-directory: 'behat-magento2-extension'
 
       - name: "Run tests without compiled DI"
-        run: "bin/behat -swithout_compiled_di"
+        run: "vendor/bin/behat -swithout_compiled_di"
         working-directory: 'behat-magento2-extension'
 
       - name: "Run tests with compiled DI"
-        run: "bin/behat -swith_compiled_di"
+        run: "vendor/bin/behat -swith_compiled_di"
         working-directory: 'behat-magento2-extension'

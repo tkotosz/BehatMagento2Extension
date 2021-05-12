@@ -3,13 +3,12 @@
 namespace Bex\Behat\Magento2Extension\HelperContainer;
 
 use Bex\Behat\Magento2Extension\Service\MagentoObjectManager;
-use Interop\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyServiceContainer;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 
-class Magento2SymfonyServiceContainer extends SymfonyServiceContainer implements ContainerInterface
+class Magento2SymfonyServiceContainer extends SymfonyServiceContainer
 {
     /**
      * @var MagentoObjectManager

@@ -11,11 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
-use Magento\Framework\Registry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Magento\Authorization\Model\ResourceModel\Role\Collection;
-use Magento\Backend\Model\Auth\Session;
-use Magento\User\Model\UserFactory;
 
 class MagentoObjectManagerInitializer implements EventSubscriberInterface
 {
