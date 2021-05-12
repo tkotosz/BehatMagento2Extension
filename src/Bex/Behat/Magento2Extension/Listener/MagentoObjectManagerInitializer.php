@@ -89,27 +89,6 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $appState = $magentoObjectManager->get(State::class);
         $appState->setAreaCode($mainArea);
-
-        // TODO can we remove this?
-        if ($appState->getAreaCode() === Area::AREA_ADMINHTML) {
-            $registry = $magentoObjectManager->get(Registry::class);
-            $registry->register('isSecureArea', true);
-            $roleCollection = $magentoObjectManager->get(Collection::class);
-            $roleCollection->setRolesFilter();
-
-            $adminRole = $roleCollection->getFirstItem();
-
-            $userFactory = $magentoObjectManager->get(UserFactory::class);
-            $user = $userFactory->create();
-
-            $reflectedUser = new \ReflectionObject($user);
-            $aclRoleProperty = $reflectedUser->getProperty('_role');
-            $aclRoleProperty->setAccessible(true);
-            $aclRoleProperty->setValue($user, $adminRole);
-
-            $session = $magentoObjectManager->get(Session::class);
-            $session->setUser($user);
-        }
     }
 
     // TODO replace this with one of the nice array diff packages :D
