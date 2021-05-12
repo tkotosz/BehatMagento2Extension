@@ -2,9 +2,11 @@
 
 namespace Bex\Behat\Magento2Extension\Acceptance\Context;
 
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\PyStringNode;
 use Bex\Behat\Context\Services\ProcessFactory;
 use Bex\Behat\Context\TestRunnerContext as DefaultTestRunnerContext;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -169,6 +171,17 @@ CONTENT;
         $this->filesystem->dumpFile($file, $content->getRaw());
 
         $this->files[] = $file;
+    }
+
+    /**
+     * @param  AfterScenarioScope $scope
+     */
+    public function printTesterOutputOnFailure($scope)
+    {
+        if ($this->behatProcess !== null && !$scope->getTestResult()->isPassed()) {
+            echo "ERROR! Output of secondary Behat process:" . PHP_EOL;
+            echo $this->behatProcess->getOutput() . $this->behatProcess->getErrorOutput() . PHP_EOL;
+        }
     }
 
     protected function runMagentoCommand(string $command, string $arguments = '')
