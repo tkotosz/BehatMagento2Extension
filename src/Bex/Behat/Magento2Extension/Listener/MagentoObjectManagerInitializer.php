@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Rogervila\ArrayDiffMultidimensional;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MagentoObjectManagerInitializer implements EventSubscriberInterface
@@ -74,7 +75,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
         foreach ($areas as $area) {
             $config = array_replace_recursive(
                 $config,
-                $this->arrayRecursiveDiff($configLoader->load($area), $configLoader->load(Area::AREA_GLOBAL))
+                ArrayDiffMultidimensional::compare($configLoader->load($area), $configLoader->load(Area::AREA_GLOBAL))
             );
         }
 
@@ -85,29 +86,5 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $appState = $magentoObjectManager->get(State::class);
         $appState->setAreaCode($mainArea);
-    }
-
-    // TODO replace this with one of the nice array diff packages :D
-    // copied from http://php.net/manual/en/function.array-diff.php#91756
-    private function arrayRecursiveDiff($original, $excluded): array
-    {
-        $aReturn = [];
-
-        foreach ($original as $key => $value) {
-            if (array_key_exists($key, $excluded)) {
-                if (is_array($value)) {
-                    $recursiveDiff = $this->arrayRecursiveDiff($value, $excluded[$key]);
-                    if (count($recursiveDiff)) { $aReturn[$key] = $recursiveDiff; }
-                } else {
-                    if ($value != $excluded[$key]) {
-                        $aReturn[$key] = $value;
-                    }
-                }
-            } else {
-                $aReturn[$key] = $value;
-            }
-        }
-
-        return $aReturn;
     }
 }
