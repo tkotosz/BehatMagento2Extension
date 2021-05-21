@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Rogervila\ArrayDiffMultidimensional;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -38,6 +39,34 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             $areas = [$areas];
         }
 
+        $mainArea = array_shift($areas);
+        $rootDir = $this->loadMagentoBootstrap();
+        $config = $this->loadDiConfig($rootDir, $mainArea, $areas);
+
+        $magentoObjectManager = $this->createObjectManager($rootDir);
+        $magentoObjectManager->configure($config);
+
+        $appState = $magentoObjectManager->get(State::class);
+        $appState->setAreaCode($mainArea);
+    }
+
+    private function loadDiConfig(string $rootDir, string $mainArea, array $testAreas): array
+    {
+        $configLoader = $this->createObjectManager($rootDir)->get(ConfigLoaderInterface::class);
+
+        $config = $configLoader->load($mainArea);
+        $globalAreaConfig = $configLoader->load(Area::AREA_GLOBAL);
+        foreach ($testAreas as $testArea) {
+            $testAreaConfig = $configLoader->load($testArea);
+            $configOverrides = ArrayDiffMultidimensional::compare($testAreaConfig, $globalAreaConfig);
+            $config = array_replace_recursive($config, $configOverrides);
+        }
+
+        return $config;
+    }
+
+    private function loadMagentoBootstrap(): string
+    {
         $bootstrapPath = $this->config->getMagentoBootstrapPath();
 
         if (!file_exists($bootstrapPath)) {
@@ -48,29 +77,11 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             require_once $bootstrapPath;
         })();
 
-        $params = [];
+        return dirname(dirname($bootstrapPath));
+    }
 
-        $rootDir = dirname(dirname($bootstrapPath));
-
-        $magentoObjectManager = Bootstrap::create($rootDir, $params)->getObjectManager();
-
-        $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
-
-        $mainArea = array_shift($areas);
-        $config = $configLoader->load($mainArea);
-        $globalAreaConfig = $configLoader->load(Area::AREA_GLOBAL);
-        foreach ($areas as $area) {
-            $config = array_replace_recursive(
-                $config,
-                ArrayDiffMultidimensional::compare($configLoader->load($area), $globalAreaConfig)
-            );
-        }
-
-        $magentoObjectManager = Bootstrap::create($rootDir, $params)->getObjectManager();
-
-        $magentoObjectManager->configure($config);
-
-        $appState = $magentoObjectManager->get(State::class);
-        $appState->setAreaCode($mainArea);
+    private function createObjectManager(string $rootDir): ObjectManagerInterface
+    {
+        return Bootstrap::create($rootDir, [])->getObjectManager();
     }
 }
