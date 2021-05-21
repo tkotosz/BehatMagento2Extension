@@ -57,8 +57,6 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
         echo BP . PHP_EOL;
         echo $rootDir . PHP_EOL;
 
-        $rootDir = BP;
-
         $magentoObjectManager = Bootstrap::create($rootDir, $params)->getObjectManager();
 
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
