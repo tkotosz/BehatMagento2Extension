@@ -56,7 +56,9 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
         ];
 
-        Bootstrap::create(BP, $params);
+        $rootDir = dirname($bootstrapPath);
+
+        Bootstrap::create($rootDir, $params);
         $magentoObjectManager = ObjectManager::getInstance();
 
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
@@ -70,7 +72,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             );
         }
 
-        Bootstrap::create(BP, $params);
+        Bootstrap::create($rootDir, $params);
         $magentoObjectManager = ObjectManager::getInstance();
 
         $magentoObjectManager->configure($config);
