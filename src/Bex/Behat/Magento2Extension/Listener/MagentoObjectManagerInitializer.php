@@ -52,8 +52,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $rootDir = dirname($bootstrapPath);
 
-        Bootstrap::create($rootDir, $params);
-        $magentoObjectManager = ObjectManager::getInstance();
+        $magentoObjectManager = Bootstrap::create($rootDir, $params)->getObjectManager();
 
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
 
@@ -67,8 +66,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             );
         }
 
-        Bootstrap::create($rootDir, $params);
-        $magentoObjectManager = ObjectManager::getInstance();
+        $magentoObjectManager = Bootstrap::create($rootDir, $params)->getObjectManager();
 
         $magentoObjectManager->configure($config);
 
