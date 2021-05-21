@@ -46,16 +46,8 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         include $bootstrapPath;
 
-        $params = $_SERVER;
-
-        // TODO Can we remove this?
-        $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
-            DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
-            DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
-            DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
-            DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
-        ];
-
+        $params = [];
+        
         $rootDir = dirname($bootstrapPath);
 
         Bootstrap::create($rootDir, $params);
