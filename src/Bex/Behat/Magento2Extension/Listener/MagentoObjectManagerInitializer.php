@@ -59,10 +59,11 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
 
         $mainArea = array_shift($areas);
         $config = $configLoader->load($mainArea);
+        $globalAreaConfig = $configLoader->load(Area::AREA_GLOBAL);
         foreach ($areas as $area) {
             $config = array_replace_recursive(
                 $config,
-                ArrayDiffMultidimensional::compare($configLoader->load($area), $configLoader->load(Area::AREA_GLOBAL))
+                ArrayDiffMultidimensional::compare($configLoader->load($area), $globalAreaConfig)
             );
         }
 
