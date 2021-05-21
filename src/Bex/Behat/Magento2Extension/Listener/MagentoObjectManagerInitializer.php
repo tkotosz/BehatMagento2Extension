@@ -16,30 +16,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MagentoObjectManagerInitializer implements EventSubscriberInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @param Config $config
-     */
     public function __construct(Config $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SuiteTested::BEFORE => 'initApplication'
         ];
     }
 
-    public function initApplication(BeforeSuiteTested $event)
+    public function initApplication(BeforeSuiteTested $event): void
     {
         $areas = $event->getSuite()->getSettings()['magento']['area'] ?? Area::AREA_GLOBAL;
 
@@ -65,7 +56,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
         ];
 
-        $bootstrap = Bootstrap::create(BP, $params);
+        Bootstrap::create(BP, $params);
         $magentoObjectManager = ObjectManager::getInstance();
 
         $configLoader = $magentoObjectManager->get(ConfigLoaderInterface::class);
@@ -79,7 +70,7 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             );
         }
 
-        $bootstrap = Bootstrap::create(BP, $params);
+        Bootstrap::create(BP, $params);
         $magentoObjectManager = ObjectManager::getInstance();
 
         $magentoObjectManager->configure($config);
