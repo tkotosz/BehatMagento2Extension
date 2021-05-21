@@ -44,18 +44,13 @@ class MagentoObjectManagerInitializer implements EventSubscriberInterface
             throw new \RuntimeException(sprintf("Magento's bootstrap file was not found at path '%s'", $bootstrapPath));
         }
 
-//        (static function() use ($bootstrapPath) {
-//            require_once $bootstrapPath;
-//        })();
-
-        require_once $bootstrapPath;
+        (static function() use ($bootstrapPath) {
+            require_once $bootstrapPath;
+        })();
 
         $params = [];
 
-
-        $rootDir = dirname($bootstrapPath);
-        echo BP . PHP_EOL;
-        echo $rootDir . PHP_EOL;
+        $rootDir = dirname(dirname($bootstrapPath));
 
         $magentoObjectManager = Bootstrap::create($rootDir, $params)->getObjectManager();
 
