@@ -33,7 +33,7 @@ The `Behat service autowiring feature <https://github.com/Behat/Behat/pull/1071>
          */
         public function theProductRepositorySuccessfullyInjectedAsArgument(ProductRepositoryInterface $productRepository)
         {
-            if (!$this->productRepository instanceof ProductRepositoryInterface) {
+            if (!$productRepository instanceof ProductRepositoryInterface) {
                 throw new Exception('Something went wrong :(');
             }
         }
