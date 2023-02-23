@@ -62,8 +62,7 @@ jobs:
         with:
           path: |
             ~/.composer/cache
-            magento
-          key: "magento-2.4.5-with-php-8.1"
+          key: "composer-cache"
 
       - name: "Create Magento 2.4.5 project with testing dependencies"
         run: |
@@ -72,7 +71,6 @@ jobs:
           composer require tkotosz/test-area-magento2
           composer require --dev behat/behat friends-of-behat/mink-extension behat/mink-goutte-driver
           cd -
-        if: hashFiles('magento/composer.json') == ''
 
       - name: "Install Magento"
         run: |
