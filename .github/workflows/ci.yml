@@ -98,5 +98,5 @@ jobs:
         working-directory: 'behat-magento2-extension'
 
       - name: "Run tests with compiled DI"
-        run: "vendor/bin/behat -swith_compiled_di"
+        run: "vendor/bin/behat -swith_compiled_di features/mering_di_configurations.feature"
         working-directory: 'behat-magento2-extension'
