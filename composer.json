@@ -43,7 +43,8 @@
     ],
     "config": {
         "allow-plugins": {
-            "magento/composer-dependency-version-audit-plugin": true
+            "magento/composer-dependency-version-audit-plugin": true,
+            "laminas/laminas-dependency-plugin": true
         }
     }
 }
