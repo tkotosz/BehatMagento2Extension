@@ -21,7 +21,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^7.4|^8.1",
         "behat/behat": "^3.7",
         "magento/framework": "^101|^103",
         "container-interop/container-interop": "^1.2",
