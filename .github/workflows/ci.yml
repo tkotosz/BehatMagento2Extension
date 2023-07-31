@@ -114,6 +114,10 @@ jobs:
       - name: "Checkout"
         uses: "actions/checkout@v2"
 
+      - name: "Setup Composer Auth"
+        run: "echo $COMPOSER_AUTH_JSON > ~/.composer/auth.json"
+        env:
+          COMPOSER_AUTH_JSON: ${{ secrets.COMPOSER_AUTH_JSON }}
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
