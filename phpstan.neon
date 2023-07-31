@@ -1,0 +1,12 @@
+includes:
+    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
+
+parameters:
+    scanDirectories:
+        - ../../magento
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    parallel:
+        processTimeout: 120.0

@@ -1,3 +1,4 @@
+@virtual @mocking
 Feature: Mocking
   As a developer
   In order to write Behat tests easily
@@ -220,6 +221,7 @@ Feature: Mocking
           }
       }
       """
+    And I run the Magento command "module:enable" with arguments "Acme_Awesome"
 
   Scenario: Override global service dependency using preference
     Given I have a global Magento DI configuration in this module:
@@ -244,12 +246,12 @@ Feature: Mocking
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
             magento:
               area: test
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing
@@ -281,12 +283,12 @@ Feature: Mocking
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
             magento:
               area: test
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing
@@ -314,12 +316,12 @@ Feature: Mocking
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
             magento:
               area: [frontend, test]
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing
@@ -351,12 +353,12 @@ Feature: Mocking
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
             magento:
               area: [frontend, test]
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing

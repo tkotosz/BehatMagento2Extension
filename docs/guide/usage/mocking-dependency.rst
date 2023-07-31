@@ -28,8 +28,7 @@ And you have an implementation for this service:
 
     class ConfigProvider implements ConfigProviderInterface
     {
-        /** @var ScopeConfigInterface */
-        private $scopeConfig;
+        private ScopeConfigInterface $scopeConfig;
 
         public function __construct(ScopeConfigInterface $scopeConfig)
         {
@@ -189,7 +188,7 @@ In order to load this custom DI configuration during the test run the test area 
           contexts:
             - YourContext
           
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
           
           magento:
             area: test

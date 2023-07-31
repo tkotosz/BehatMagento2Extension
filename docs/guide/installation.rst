@@ -15,4 +15,4 @@ The recommended installation method is through `Composer <https://getcomposer.or
 
 .. code-block:: bash
 
-    $ composer require --dev bex/behat-magento2-extension
+    $ composer require --dev seec/behat-magento2-extension

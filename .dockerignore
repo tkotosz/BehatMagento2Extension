@@ -1,0 +1,10 @@
+./.github
+./docs
+./docker
+./docker/data
+./docker-compose.yml
+./vendor
+!./docker/php/etc
+!./docker/php/etc/*
+./magento
+./test_dir

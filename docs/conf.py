@@ -18,8 +18,8 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'Behat Magento 2 Extension'
-copyright = '2020, Tibor Kotosz'
-author = 'Tibor Kotosz'
+copyright = '2023, Tibor Kotosz, Maximilian Graf Schimmelmann'
+author = 'Maximilian Graf Schimmelmann'
 
 
 # -- General configuration ---------------------------------------------------

@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        XDEBUG_VERSION: xdebug
+        PHP_VERSION: php:cli-alpine3.18
+        MAGENTO_PUBLIC_KEY: ${MAGENTO_PUBLIC_KEY}
+        MAGENTO_SECRET_KEY: ${MAGENTO_SECRET_KEY}
+    volumes:
+      - ./:/var/www/html/vendor/seec/behat-magento2-extension
+      - ./behat.yml:/var/www/html/behat.yml
+      - ./features:/var/www/html/features
+      - ./magento:/var/www/html/vendor/magento-ext
+    environment:
+      PHP_IDE_CONFIG: serverName=magento2-behat-extension
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+
+  mysql:
+    image: mariadb:10.6
+    environment:
+      MYSQL_USER: magento
+      MYSQL_PASSWORD: magento
+      MYSQL_DATABASE: magento
+      MYSQL_ROOT_PASSWORD: magento
+    volumes:
+      - ./docker/data/database/:/var/lib/mysql/
+    ports:
+      - "9906:3306"
+
+  opensearch:
+    image: opensearchproject/opensearch:2.7.0
+    environment:
+      discovery.type: single-node
+      cluster.name: opensearch-cluster
+      node.name: opensearch-node
+      bootstrap.memory_lock: true
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+      DISABLE_INSTALL_DEMO_CONFIG: true
+      DISABLE_SECURITY_PLUGIN: true
+    ports:
+      - "8892:9200"

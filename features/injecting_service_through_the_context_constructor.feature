@@ -1,3 +1,4 @@
+@virtual
 Feature: Injecting service from Magento DI to Behat Context through the constructor
   As a developer
   In order to write Behat tests easily
@@ -47,10 +48,10 @@ Feature: Injecting service from Magento DI to Behat Context through the construc
             contexts:
               - FeatureContext:
                 - '@Magento\Catalog\Api\ProductRepositoryInterface'
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing
@@ -64,10 +65,10 @@ Feature: Injecting service from Magento DI to Behat Context through the construc
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should not see a failing test

@@ -5,21 +5,24 @@ on:
   push:
     branches:
       - "master"
-      - "2.x"
-      - "3.x"
 
 jobs:
   behat:
     name: "Acceptance Tests"
-
     runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+          - "8.2"
 
     env:
       M2_INSTANCE_ROOT_DIR: ${{ github.workspace }}/magento
 
     services:
       mysql:
-        image: mariadb:10.4
+        image: mariadb:10.6
         env:
           MYSQL_USER: magento
           MYSQL_PASSWORD: magento
@@ -29,25 +32,25 @@ jobs:
           - 3306:3306
         options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
 
-      elasticsearch:
-        image: elasticsearch:7.12.1
+      opensearch:
+        image: opensearchproject/opensearch:2.7.0
         env:
-          ES_JAVA_OPTS: -Xms512m -Xmx512m
           discovery.type: single-node
+          cluster.name: opensearch-cluster
+          node.name: opensearch-node
+          bootstrap.memory_lock: true
+          OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+          DISABLE_INSTALL_DEMO_CONFIG: true
+          DISABLE_SECURITY_PLUGIN: true
         ports:
-          - 9200:9200
+          - "8892:9200"
 
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-        with:
-          path: 'behat-magento2-extension'
-
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: none
-          php-version: 7.4
+          php-version: "${{ matrix.php-version }}"
           extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip, sockets
           ini-values: memory_limit=-1
           tools: composer:v2, cs2pr
@@ -63,40 +66,79 @@ jobs:
           path: |
             ~/.composer/cache
             magento
-          key: "magento-2.4.2-with-php-7.4"
+          key: "magento-2.4.6-with-php-${{ matrix.php-version }}"
 
-      - name: "Create Magento 2.4.2 project with testing dependencies"
+      - name: "Create Magento 2.4.6 project with testing dependencies"
         run: |
-          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.2 magento
-          cd magento
-          composer require tkotosz/test-area-magento2
-          composer require --dev behat/behat friends-of-behat/mink-extension behat/mink-goutte-driver
-          cd -
+          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento
         if: hashFiles('magento/composer.json') == ''
+
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+        with:
+          path: 'magento/vendor/seec/behat-magento2-extension'
 
       - name: "Install Magento"
         run: |
           rm -f app/etc/env.php
           mkdir -p pub/static pub/media
-          bin/magento setup:install --admin-email "kotosy.magento@gmail.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123" --admin-user "admin" --backend-frontname admin --base-url "http://magento.test" --db-host 127.0.0.1 --db-name magentodb --db-user magento --db-password magento --session-save files --use-rewrites 1 --use-secure 0 --search-engine=elasticsearch7 --elasticsearch-host=127.0.0.1 --elasticsearch-port=9200 -vvv
+          bin/magento setup:install --admin-email "magento@magento.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123!#" --admin-user "admin" --backend-frontname admin --base-url "http://magento.test" --db-host 127.0.0.1 --db-name magento --db-user magento --db-password magento --session-save files --use-rewrites 1 --use-secure 0 --opensearch-host="opensearch" --opensearch-port="9200" --timezone="Europe/Amsterdam" -vvv
           bin/magento setup:upgrade
         working-directory: 'magento'
 
       - name: "Install Behat Magento 2 Extension in the Magento 2 Test Environment"
         run: |
-          composer config repositories.behat-m2-extension path ../behat-magento2-extension
-          composer require --dev bex/behat-magento2-extension:@dev
+          composer config repositories.behat-m2-extension path vendor/seec/behat-magento2-extension
+          composer require --dev seec/behat-magento2-extension:@dev
         working-directory: 'magento'
 
       - name: "Install Behat Magento 2 Extension's testing dependencies"
-        run: |
-          composer install
-        working-directory: 'behat-magento2-extension'
+        run: "composer install --no-interaction --no-progress --no-suggest"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "Run tests without compiled DI"
-        run: "bin/behat -swithout_compiled_di"
-        working-directory: 'behat-magento2-extension'
+      - name: "Run full test suite"
+        run: "vendor/bin/behat --tags=@virtual --stop-on-failure --config behat.yml"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "Run tests with compiled DI"
-        run: "bin/behat -swith_compiled_di"
-        working-directory: 'behat-magento2-extension'
+  code-style:
+    name: "Check code style"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+          - "8.2"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: none
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v2"
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: "php-${{ matrix.php-version }}"
+
+      - name: "Install dependencies"
+        run: "composer install --no-interaction --no-progress --no-suggest"
+
+      - name: "EasyCodingStandards for Src"
+        run: "vendor/bin/ecs check src/ features/ tests/ --no-interaction --no-progress-bar"
+
+      - name: "PhpStan for Src and Feature Contexts"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle src/ features/ --level=8 | cs2pr"
+
+      - name: "PhpStan for Test"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"

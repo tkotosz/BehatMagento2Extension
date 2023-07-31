@@ -1,3 +1,4 @@
+@virtual
 Feature: Injecting service from Magento DI to Behat Context through a Behat Step argument
   As a developer
   In order to write Behat tests easily
@@ -37,10 +38,11 @@ Feature: Injecting service from Magento DI to Behat Context through a Behat Step
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+              - SEEC\Behat\Magento2Extension\Features\Bootstrap\Context\Hook\DatabaseHook
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing

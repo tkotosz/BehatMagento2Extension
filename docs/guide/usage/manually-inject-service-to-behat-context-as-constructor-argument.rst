@@ -74,6 +74,6 @@ If you didn't enable the Behat autowire feature then you need to provide your Be
           contexts:
             - YourContext:
               - '@Magento\Catalog\Api\ProductRepositoryInterface'
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
 
 That's all. With the above the Product Repository will be injected to your Behat Context.
