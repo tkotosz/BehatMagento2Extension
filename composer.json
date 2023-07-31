@@ -23,7 +23,7 @@
     "require": {
         "php": "^7.4|^8.1",
         "behat/behat": "^3.7",
-        "magento/framework": "^103.0.6",
+        "magento/framework": "^100|^103",
         "container-interop/container-interop": "^1.2",
         "symfony/dependency-injection": "^6",
         "symfony/event-dispatcher": "^6",

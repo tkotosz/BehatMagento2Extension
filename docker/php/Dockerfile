@@ -25,7 +25,7 @@ RUN set -xe \
         unzip \
         autoconf \
         gcc \
-        envsubst \
+        gettext \
         libxml2-dev \
         zip \
         gd
@@ -47,7 +47,7 @@ RUN apk add --no-cache --virtual build-essentials \
     docker-php-ext-install soap && \
     docker-php-ext-install sockets && \
     docker-php-ext-install xsl && \
-    pecl install xdebug && \
+    pecl install $XDEBUG_VERSION && \
     docker-php-ext-enable xdebug && \
     apk del build-essentials pcre-dev ${PHPIZE_DEPS} && rm -rf /usr/src/php*
 
