@@ -25,7 +25,7 @@ jobs:
         env:
           MYSQL_USER: magento
           MYSQL_PASSWORD: magento
-          MYSQL_DATABASE: magentodb
+          MYSQL_DATABASE: magento
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
@@ -95,6 +95,12 @@ jobs:
         run: "composer install --no-interaction --no-progress --no-suggest"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
+      - name: "PhpStan for Src and Feature Contexts"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle src/ features/ --level=8 | cs2pr"
+
+      - name: "PhpStan for Test"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
+
       - name: "Run full test suite"
         run: "vendor/bin/behat --tags=@virtual --stop-on-failure --config behat.yml"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
@@ -136,14 +142,8 @@ jobs:
       - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress --no-suggest"
 
-      - name: "EasyCodingStandards for Src"
+      - name: "EasyCodingStandards for Src, Features and Tests"
         run: "vendor/bin/ecs check src/ features/ tests/ --no-interaction --no-progress-bar"
-
-      - name: "PhpStan for Src and Feature Contexts"
-        run: "vendor/bin/phpstan analyse --error-format=checkstyle src/ features/ --level=8 | cs2pr"
-
-      - name: "PhpStan for Test"
-        run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
 
       - name: "Run unit tests"
         run: "vendor/bin/phpunit tests/"
