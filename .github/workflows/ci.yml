@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
           - "8.1"
           - "8.2"
 
@@ -101,12 +100,11 @@ jobs:
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
   code-style:
-    name: "Check code style"
+    name: "CodeStyle + UnitTests"
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
         php-version:
-          - "7.4"
           - "8.1"
           - "8.2"
 
@@ -146,3 +144,6 @@ jobs:
 
       - name: "PhpStan for Test"
         run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
+
+      - name: "Run unit tests"
+        run: "vendor/bin/phpunit tests/"

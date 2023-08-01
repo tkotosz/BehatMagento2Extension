@@ -22,13 +22,12 @@ services:
     env_file:
       - .env
 
-  php-7.4:
+  php-8.1:
     build:
       context: .
       dockerfile: ./docker/php/Dockerfile
       args:
-        XDEBUG_VERSION: xdebug-3.1.5
-        PHP_VERSION: php:7.4.33-zts-alpine3.16
+        PHP_VERSION: php:8.1.20-zts-alpine3.18
         MAGENTO_PUBLIC_KEY: ${MAGENTO_PUBLIC_KEY}
         MAGENTO_SECRET_KEY: ${MAGENTO_SECRET_KEY}
     volumes:

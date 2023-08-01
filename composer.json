@@ -21,9 +21,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.4|^8.1",
+        "php": "^8.1",
         "behat/behat": "^3.7",
-        "magento/framework": "^101|^103",
+        "magento/framework": "^103",
         "container-interop/container-interop": "^1.2",
         "symfony/dependency-injection": "^6",
         "symfony/event-dispatcher": "^6",

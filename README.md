@@ -5,9 +5,8 @@ Behat Magento2 Extension
 [![Latest Stable Version](https://poser.pugx.org/nopenopenope/behat-magento2-extension/version)](https://packagist.org/packages/nopenopenope/behat-magento2-extension)
 ![Build Status](https://github.com/nopenopenope/BehatMagento2Extension/actions/workflows/ci.yml/badge.svg)
 
-This is a fork of the [BehatMagentoExtension](https://github.com/tkotosz/BehatMagento2Extension) which is
-compatible with PHP7.4 as well as PHP8 and greater. This should ensure successful end-to-end testing of Magento 2
-projects.
+This is a fork of the [BehatMagentoExtension](https://github.com/tkotosz/BehatMagento2Extension), which is
+compatible with PHP8.1 and greater. This should ensure successful end-to-end testing of Magento 2 projects.
 
 The `BehatMagento2Extension` provides a custom service container for Behat which allows to inject Magento services into
 Behat Contexts and Behat helper services.
