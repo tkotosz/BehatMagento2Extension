@@ -24,12 +24,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(
         'seec.behat.magento2_extension.helper_container.loader.delegating_loader_helper',
-        DelegatingLoaderHelper::class
+        DelegatingLoaderHelper::class,
     )->public();
 
     $services->set(
         'seec.behat.magento2_extension.delegating_symfony_service_container_factory',
-        DelegatingSymfonyServiceContainerFactory::class
+        DelegatingSymfonyServiceContainerFactory::class,
     )
         ->public()
         ->args([
@@ -64,7 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(
         'seec.magento2_extension.object_manager_initializer_listener',
-        MagentoObjectManagerInitListener::class
+        MagentoObjectManagerInitListener::class,
     )
         ->tag('event_dispatcher.subscriber')
         ->args([service('seec.magento2_extension.config')]);

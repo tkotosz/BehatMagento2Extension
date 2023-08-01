@@ -28,7 +28,7 @@ final class DatabaseHook implements Context, DatabaseHookInterface
         ResourceConnection $resource,
         DefaultFixtures $defaultFixtures = null,
         CacheCleaner $cacheCleaner = null,
-        Purger $purger = null
+        Purger $purger = null,
     ) {
         $this->resource = $resource;
         $this->fixturesManager = $defaultFixtures ?? new DefaultFixtures();

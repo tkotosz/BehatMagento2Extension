@@ -56,7 +56,7 @@ final class Magento2ExtensionTest extends TestCase
             ->method('set')
             ->with(...$this->withConsecutive(
                 ['seec.magento2_extension.config', $this->isInstanceOf(ConfigInterface::class)],
-                ['seec.behat_service_container', $containerBuilder]
+                ['seec.behat_service_container', $containerBuilder],
             ));
 
         $this->extension->load($containerBuilder, [

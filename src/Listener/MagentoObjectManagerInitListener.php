@@ -23,11 +23,9 @@ use Webmozart\Assert\Assert;
 
 final class MagentoObjectManagerInitListener implements MagentoObjectManagerInitListenerInterface
 {
-    private ConfigInterface $config;
-
-    public function __construct(ConfigInterface $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        private readonly ConfigInterface $config,
+    ) {
     }
 
     public static function getSubscribedEvents(): array
@@ -65,7 +63,7 @@ final class MagentoObjectManagerInitListener implements MagentoObjectManagerInit
         foreach ($areas as $area) {
             $config = array_replace_recursive(
                 $config,
-                $this->arrayRecursiveDiff($configLoader->load($area), $configLoader->load(Area::AREA_GLOBAL))
+                $this->arrayRecursiveDiff($configLoader->load($area), $configLoader->load(Area::AREA_GLOBAL)),
             );
         }
 

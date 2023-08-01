@@ -33,7 +33,7 @@ final class PurgerTest extends TestCase
             ->with(...$this->withConsecutive(
                 ['SET FOREIGN_KEY_CHECKS = 0'],
                 ['TRUNCATE TABLE table1'],
-                ['SET FOREIGN_KEY_CHECKS = 1']
+                ['SET FOREIGN_KEY_CHECKS = 1'],
             ));
 
         $mockSelect = $this->createMock(Select::class);
@@ -45,7 +45,7 @@ final class PurgerTest extends TestCase
             ->method('from')
             ->with(...$this->withConsecutive(
                 ['table1', 'COUNT(*)'],
-                ['table2', 'COUNT(*)']
+                ['table2', 'COUNT(*)'],
             ));
         $mockConnection->expects($this->exactly(2))
             ->method('fetchOne')

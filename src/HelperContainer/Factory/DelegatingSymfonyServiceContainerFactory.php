@@ -10,16 +10,10 @@ use SEEC\Behat\Magento2Extension\ServiceContainer\ConfigInterface;
 
 final class DelegatingSymfonyServiceContainerFactory implements DelegatingSymfonyServiceContainerFactoryInterface
 {
-    private string $basePath;
-
-    private DelegatingLoaderHelperInterface $loaderHelper;
-
     public function __construct(
-        string $basePath,
-        DelegatingLoaderHelperInterface $loaderHelper
+        private readonly string $basePath,
+        private readonly DelegatingLoaderHelperInterface $loaderHelper,
     ) {
-        $this->basePath = $basePath;
-        $this->loaderHelper = $loaderHelper;
     }
 
     public function create(ConfigInterface $config, array $symfonyServiceContainers): DelegatingSymfonyServiceContainer

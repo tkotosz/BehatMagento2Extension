@@ -22,7 +22,7 @@ final class DelegatingLoaderHelper implements DelegatingLoaderHelperInterface
                 new XmlFileLoader($container, $fileLocator),
                 new YamlFileLoader($container, $fileLocator),
                 new PhpFileLoader($container, $fileLocator),
-            ])
+            ]),
         );
         $delegatingLoader->load($file);
     }

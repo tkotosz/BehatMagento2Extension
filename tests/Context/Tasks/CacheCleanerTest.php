@@ -17,14 +17,11 @@ final class CacheCleanerTest extends TestCase
 {
     private CacheCleanerInterface $cacheCleaner;
 
-    /** @var MagentoPathProviderInterface|MockObject|object */
-    private object $pathProvider;
+    private MagentoPathProviderInterface|MockObject $pathProvider;
 
-    /** @var Filesystem|MockObject|object */
-    private object $fileSystem;
+    private Filesystem|MockObject $fileSystem;
 
-    /** @var Finder|MockObject|object */
-    private object $finder;
+    private Finder|MockObject $finder;
 
     public function setUp(): void
     {

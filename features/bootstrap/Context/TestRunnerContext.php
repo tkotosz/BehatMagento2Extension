@@ -40,7 +40,7 @@ final class TestRunnerContext extends AbstractTestRunnerContext implements Conte
         ?WorkingDirectoryServiceInterface $workingDirectoryService = null,
         ?MagentoPathProviderInterface $magentoPathProvider = null,
         ?CacheCleaner $cacheCleaner = null,
-        ?string $workingDirectory = null
+        ?string $workingDirectory = null,
     ) {
         $this->filesystem = $fileSystem ?: new Filesystem();
         $this->processFactory = $processFactory ?: new ProcessFactory();
@@ -57,7 +57,7 @@ final class TestRunnerContext extends AbstractTestRunnerContext implements Conte
         $this->filesystem->copy(
             sprintf('%s/app/etc/config.php', $this->getMagentoRootDirectory()),
             '/tmp/config.php.backup',
-            true
+            true,
         );
     }
 
@@ -192,7 +192,7 @@ CONTENT;
         $file = sprintf(
             '%s/features/bootstrap/%s.php',
             $this->getWorkingDirectory(),
-            str_replace('\\', '/', $className)
+            str_replace('\\', '/', $className),
         );
         $this->createFile($file, $content->getRaw());
     }
@@ -226,7 +226,7 @@ CONTENT;
     protected function runMagentoCommand(?string $command = null, ?string $arguments = null): void
     {
         $magentoProcess = $this->processFactory->createFromInput(
-            new MagentoCommandInput($command, $arguments, $this->getMagentoRootDirectory())
+            new MagentoCommandInput($command, $arguments, $this->getMagentoRootDirectory()),
         );
 
         $this->addProcess($magentoProcess);
@@ -238,8 +238,8 @@ CONTENT;
             sprintf(
                 'Expected Exit Code of Magento Process to be 0, got %d with message %s',
                 $magentoProcess->getExitCode(),
-                $magentoProcess->getErrorOutput()
-            )
+                $magentoProcess->getErrorOutput(),
+            ),
         );
     }
 
@@ -258,7 +258,7 @@ CONTENT;
             $this->filesystem->copy(
                 '/tmp/config.php.backup',
                 sprintf('%s/app/etc/config.php', $this->getMagentoRootDirectory()),
-                true
+                true,
             );
             $this->filesystem->remove('/tmp/config.php.backup');
             $this->cacheCleaner->clean(false);

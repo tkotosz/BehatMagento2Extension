@@ -12,13 +12,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class Magento2SymfonyServiceContainer extends SymfonyServiceContainer implements ServiceContainerInterface
 {
-    private MagentoObjectManagerInterface $magentoObjectManager;
-
     public function __construct(
-        MagentoObjectManagerInterface $magentoObjectManager
+        private readonly MagentoObjectManagerInterface $magentoObjectManager,
     ) {
         parent::__construct();
-        $this->magentoObjectManager = $magentoObjectManager;
     }
 
     public function has($id): bool

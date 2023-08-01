@@ -17,24 +17,12 @@ use Webmozart\Assert\Assert;
 
 final class CustomerContext extends AbstractMagentoContext
 {
-    private SharedStorage $sharedStorage;
-
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
-    private EncryptorInterface $encryptor;
-
-    private StoreRepositoryInterface $storeRepository;
-
     public function __construct(
-        SharedStorage $sharedStorage,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        StoreRepositoryInterface $storeRepository,
-        EncryptorInterface $encryptor
+        private readonly SharedStorage $sharedStorage,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly StoreRepositoryInterface $storeRepository,
+        private readonly EncryptorInterface $encryptor,
     ) {
-        $this->sharedStorage = $sharedStorage;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->encryptor = $encryptor;
-        $this->storeRepository = $storeRepository;
     }
 
     private function getCustomerRepository(): CustomerRepositoryInterface

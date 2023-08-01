@@ -18,8 +18,7 @@ final class DelegatingSymfonyServiceContainerFactoryTest extends TestCase
 
     private string $basePath;
 
-    /** object|MockObject|DelegatingLoaderHelperInterface */
-    private object $helper;
+    private DelegatingLoaderHelperInterface|MockObject $helper;
 
     public function setUp(): void
     {

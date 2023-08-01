@@ -20,7 +20,7 @@ final class CacheCleaner implements CacheCleanerInterface
     public function __construct(
         MagentoPathProviderInterface $magentoPathProvider = null,
         Filesystem $filesystem = null,
-        Finder $finder = null
+        Finder $finder = null,
     ) {
         $this->magentoPathProvider = $magentoPathProvider ?? new MagentoPathProvider();
         $this->fileSystem = $filesystem ?? new Filesystem();

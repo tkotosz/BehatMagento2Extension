@@ -28,8 +28,7 @@ final class MagentoObjectManagerInitListenerTest extends TestCase
 
     private MagentoObjectManagerInitListenerInterface $listener;
 
-    /** @var ConfigInterface|MockObject */
-    private object $config;
+    private ConfigInterface|MockObject $config;
 
     public function setUp(): void
     {
@@ -97,13 +96,13 @@ final class MagentoObjectManagerInitListenerTest extends TestCase
                 [Registry::class],
                 [Collection::class],
                 ['Magento\User\Model\User'],
-                [Session::class]
+                [Session::class],
             ))
             ->willReturnOnConsecutiveCalls(
                 $registryMock,
                 $collectionMock,
                 $user,
-                $sessionMock
+                $sessionMock,
             );
 
         $registryMock->expects($this->once())

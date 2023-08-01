@@ -13,20 +13,11 @@ use Webmozart\Assert\Assert;
 
 final class StockContext extends AbstractMagentoContext
 {
-    private StockRepositoryInterface $stockRepository;
-
-    private SharedStorage $sharedStorage;
-
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
     public function __construct(
-        StockRepositoryInterface $stockRepository,
-        SearchCriteriaBuilder $searchCriteriaFactory,
-        SharedStorage $sharedStorage
+        private readonly StockRepositoryInterface $stockRepository,
+        private readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        private readonly SharedStorage $sharedStorage,
     ) {
-        $this->stockRepository = $stockRepository;
-        $this->sharedStorage = $sharedStorage;
-        $this->searchCriteriaBuilder = $searchCriteriaFactory;
     }
 
     /**

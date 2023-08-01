@@ -12,7 +12,7 @@ final class MagentoCommandInput extends AbstractInput
     public function __construct(
         string $command = null,
         string $commandParameters = null,
-        string $workingDirectory = null
+        string $workingDirectory = null,
     ) {
         $this->setExecutor((new PhpExecutableFinder())->find() ?: null);
         $this->setExecutorParameters('-dmemory_limit=-1');

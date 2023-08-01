@@ -146,7 +146,6 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->rule(SelfAccessorFixer::class);
     $ecsConfig->rule(ShortScalarCastFixer::class);
     $ecsConfig->rule(SingleClassElementPerStatementFixer::class);
-    $ecsConfig->rule(TrailingCommaInMultilineFixer::class);
     $ecsConfig->rule(TrimArraySpacesFixer::class);
     $ecsConfig->rule(WhitespaceAfterCommaInArrayFixer::class);
     $ecsConfig->rule(NoEmptyCommentFixer::class);
@@ -220,6 +219,12 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->rule(TernaryOperatorSpacesFixer::class);
     $ecsConfig->rule(TernaryToNullCoalescingFixer::class);
     $ecsConfig->rule(UnaryOperatorSpacesFixer::class);
+    $ecsConfig->ruleWithConfiguration(TrailingCommaInMultilineFixer::class, [
+        'elements' => [
+            'arguments',
+            'parameters',
+        ],
+    ]);
     $ecsConfig->ruleWithConfiguration(NoMixedEchoPrintFixer::class, ['use' => 'echo']);
     $ecsConfig->ruleWithConfiguration(ArraySyntaxFixer::class, ['syntax' => 'short']);
     $ecsConfig->ruleWithConfiguration(ClassDefinitionFixer::class, [

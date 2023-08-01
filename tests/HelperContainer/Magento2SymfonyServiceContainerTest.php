@@ -15,8 +15,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 final class Magento2SymfonyServiceContainerTest extends TestCase
 {
-    /** @var MockObject|MagentoObjectManagerInterface|object */
-    private object $magentoObjectManager;
+    private MagentoObjectManagerInterface|MockObject $magentoObjectManager;
 
     private ServiceContainerInterface $container;
 

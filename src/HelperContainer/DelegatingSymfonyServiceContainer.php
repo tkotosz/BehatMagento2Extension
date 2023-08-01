@@ -14,15 +14,10 @@ use Webmozart\Assert\Assert;
 
 final class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implements ServiceContainerInterface
 {
-    /**
-     * @var SymfonyServiceContainer[]
-     */
-    private array $fallbackContainers;
-
-    public function __construct(array $symfonyServiceContainers)
-    {
+    public function __construct(
+        private readonly array $fallbackContainers,
+    ) {
         parent::__construct();
-        $this->fallbackContainers = $symfonyServiceContainers;
     }
 
     public function has(string $id): bool
