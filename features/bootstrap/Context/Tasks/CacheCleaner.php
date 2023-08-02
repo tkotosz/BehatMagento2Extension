@@ -19,7 +19,7 @@ final class CacheCleaner implements CacheCleanerInterface
 
     public function __construct(
         MagentoPathProviderInterface $magentoPathProvider = null,
-        Filesystem $filesystem = null,
+        FileSystem $filesystem = null,
         Finder $finder = null,
     ) {
         $this->magentoPathProvider = $magentoPathProvider ?? new MagentoPathProvider();
@@ -30,12 +30,9 @@ final class CacheCleaner implements CacheCleanerInterface
     public function clean(bool $cleanObjectManager = true): void
     {
         $directory = $this->magentoPathProvider->getMagentoRootDirectory();
-        $cacheFolder = $this->finder->in(sprintf('%s/var/cache/', $directory));
-        foreach ($cacheFolder as $cacheFolderItem) {
-            if (str_starts_with($cacheFolderItem->getRelativePathname(), '.') === false) {
-                $this->fileSystem->remove($cacheFolderItem->getPathname());
-            }
-        }
+        $this->finder->directories();
+        $cacheFolder = $this->finder->in(sprintf('%s/var/cache', $directory));
+        $this->fileSystem->remove($cacheFolder);
 
         if ($cleanObjectManager) {
             /** @var Config $objectManager */

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-cd /var/www/html/behat-magento2-extension
+cd /var/www/html/vendor/seec/behat-magento2-extension
 php vendor/bin/ecs check src/ --fix
 php vendor/bin/ecs check features/ --fix
 php vendor/bin/ecs check tests/ --fix

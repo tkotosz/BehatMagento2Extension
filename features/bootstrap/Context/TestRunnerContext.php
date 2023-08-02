@@ -45,7 +45,7 @@ final class TestRunnerContext extends AbstractTestRunnerContext implements Conte
         $this->filesystem = $fileSystem ?: new Filesystem();
         $this->processFactory = $processFactory ?: new ProcessFactory();
         $this->magentoPathProvider = $magentoPathProvider ?? new MagentoPathProvider();
-        $this->cacheCleaner = $cacheCleaner ?? new CacheCleaner($this->magentoPathProvider, $this->filesystem);
+        $this->cacheCleaner = $cacheCleaner ?? new CacheCleaner($this->magentoPathProvider);
         parent::__construct($fileSystem, $processFactory, $workingDirectoryService, $workingDirectory);
     }
 

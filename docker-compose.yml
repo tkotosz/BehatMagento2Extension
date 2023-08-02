@@ -22,26 +22,6 @@ services:
     env_file:
       - .env
 
-  php-8.1:
-    build:
-      context: .
-      dockerfile: ./docker/php/Dockerfile
-      args:
-        PHP_VERSION: php:8.1.20-zts-alpine3.18
-        MAGENTO_PUBLIC_KEY: ${MAGENTO_PUBLIC_KEY}
-        MAGENTO_SECRET_KEY: ${MAGENTO_SECRET_KEY}
-    volumes:
-      - ./:/var/www/html/vendor/seec/behat-magento2-extension
-      - ./behat.yml:/var/www/html/behat.yml
-      - ./features:/var/www/html/features
-      - ./magento:/var/www/html/vendor/magento-ext
-    environment:
-      PHP_IDE_CONFIG: serverName=magento2-behat-extension
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    env_file:
-      - .env
-
   mysql:
     image: mariadb:10.6
     environment:

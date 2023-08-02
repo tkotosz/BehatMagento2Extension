@@ -11,7 +11,6 @@ use SEEC\Behat\Magento2Extension\Features\Bootstrap\Context\Tasks\CacheCleanerIn
 use SEEC\Behat\Magento2Extension\Features\Bootstrap\Context\Tasks\MagentoPathProviderInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 final class CacheCleanerTest extends TestCase
 {
@@ -37,29 +36,14 @@ final class CacheCleanerTest extends TestCase
             ->method('getMagentoRootDirectory')
             ->willReturn('/var/www/html');
 
-        $file1 = $this->createMock(SplFileInfo::class);
-        $file1->expects($this->once())
-            ->method('getRelativePathname')
-            ->willReturn('.');
-        $file1->expects($this->never())
-            ->method('getPathname');
-
-        $file2 = $this->createMock(SplFileInfo::class);
-        $file2->expects($this->once())
-            ->method('getRelativePathname')
-            ->willReturn('test');
-        $file2->expects($this->once())
-            ->method('getPathname')
-            ->willReturn('/var/www/html/var/cache/test');
-
         $this->finder->expects($this->once())
             ->method('in')
-            ->with('/var/www/html/var/cache/')
-            ->willReturn([$file1, $file2]);
+            ->with('/var/www/html/var/cache')
+            ->willReturnSelf();
 
         $this->fileSystem->expects($this->once())
             ->method('remove')
-            ->with('/var/www/html/var/cache/test');
+            ->with($this->finder);
 
         $this->cacheCleaner->clean(false);
     }

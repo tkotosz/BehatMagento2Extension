@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SEEC\Behat\Magento2Extension\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use SEEC\Behat\Magento2Extension\Features\Bootstrap\Context\Tasks\MagentoPathProvider;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -55,16 +56,8 @@ final class Magento2Extension implements Magento2ExtensionInterface
 
     private function getMagentoBootstrapPath(): string
     {
-        $path = sprintf('%s/app/bootstrap.php', getcwd());
-        $prefix = getcwd() ?: '/';
-        $limit = count(explode('/', $prefix));
-        $i = 0;
-        while (!file_exists($path)) {
-            Assert::lessThan(++$i, $limit, 'Could not find Magento root directory');
-            $prefix = sprintf('%s/..', $prefix);
-            $path = sprintf('%s/app/bootstrap.php', $prefix);
-        }
+        $magentoPathProvider = new MagentoPathProvider();
 
-        return $path;
+        return sprintf('%s/app/bootstrap.php', $magentoPathProvider->getMagentoRootDirectory());
     }
 }

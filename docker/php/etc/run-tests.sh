@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
+cd /var/www/html/vendor/seec/behat-magento2-extension
 php vendor/bin/phpunit tests/
-php vendor/bin/behat --config /var/www/html/behat-magento2-extension/behat.yml --suite without_compiled_di --strict --stop-on-failure
-php vendor/bin/behat --config /var/www/html/behat-magento2-extension/behat.yml --suite with_compiled_di --strict --stop-on-failure
+php vendor/bin/behat --stop-on-failure
