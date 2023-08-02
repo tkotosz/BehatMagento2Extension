@@ -110,27 +110,27 @@ jobs:
           bin/magento setup:upgrade
         working-directory: 'magento'
 
-      - name: "Install Behat Magento 2 Extension in the Magento 2 Test Environment"
+      - name: "Install BehatMagento2 Extension"
         run: |
           composer config minimum-stability dev
           composer config repositories.behat-m2-extension path vendor/seec/behat-magento2-extension
           composer require seec/behat-magento2-extension:@dev
         working-directory: 'magento'
 
-      - name: "Install Behat Magento 2 Extension's testing dependencies"
+      - name: "Install BehatMagento2 Extension dependencies"
         run: "composer install --no-interaction --no-progress --no-suggest"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "PhpStan for Src and Feature Contexts"
+      - name: "Run phpstan for src/ and feature/"
         run: "vendor/bin/phpstan analyse --error-format=checkstyle src/ features/ --level=8 | cs2pr"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "PhpStan for Test"
+      - name: "Run phpstan for tests/"
         run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "Run full test suite"
-        run: "vendor/bin/behat --tags=@virtual --stop-on-failure --config behat.yml"
+      - name: "Run Behat tests"
+        run: "vendor/bin/behat --stop-on-failure --config behat.yml.dist"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
   code-style:

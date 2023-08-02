@@ -16,6 +16,7 @@ use SEEC\BehatTestRunner\Context\Components\ProcessFactory\Factory\ProcessFactor
 use SEEC\BehatTestRunner\Context\Components\ProcessFactory\Factory\ProcessFactoryInterface;
 use SEEC\BehatTestRunner\Context\Services\WorkingDirectoryServiceInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Webmozart\Assert\Assert;
 
 final class TestRunnerContext extends AbstractTestRunnerContext implements Context
@@ -41,12 +42,13 @@ final class TestRunnerContext extends AbstractTestRunnerContext implements Conte
         ?MagentoPathProviderInterface $magentoPathProvider = null,
         ?CacheCleaner $cacheCleaner = null,
         ?string $workingDirectory = null,
+        ?Finder $finder = null,
     ) {
         $this->filesystem = $fileSystem ?: new Filesystem();
         $this->processFactory = $processFactory ?: new ProcessFactory();
         $this->magentoPathProvider = $magentoPathProvider ?? new MagentoPathProvider();
         $this->cacheCleaner = $cacheCleaner ?? new CacheCleaner($this->magentoPathProvider);
-        parent::__construct($fileSystem, $processFactory, $workingDirectoryService, $workingDirectory);
+        parent::__construct($fileSystem, $processFactory, $workingDirectoryService, $workingDirectory, $finder);
     }
 
     public function createWorkingDirectory(): void
