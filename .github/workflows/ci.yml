@@ -33,6 +33,8 @@ jobs:
 
       opensearch:
         image: opensearchproject/opensearch:2.7.0
+        ports:
+          - 9200:9200
         env:
           discovery.type: single-node
           cluster.name: opensearch-cluster
@@ -40,9 +42,10 @@ jobs:
           bootstrap.memory_lock: true
           OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
           DISABLE_INSTALL_DEMO_CONFIG: true
-          DISABLE_SECURITY_PLUGIN: true
-        ports:
-          - "8892:9200"
+          plugins.security.disabled: true
+          plugins.security.ssl.http.enabled: false
+        options: --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+
 
     steps:
       - name: "Install PHP"
@@ -81,7 +84,29 @@ jobs:
         run: |
           rm -f app/etc/env.php
           mkdir -p pub/static pub/media
-          bin/magento setup:install --admin-email "magento@magento.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123!#" --admin-user "admin" --backend-frontname admin --base-url "http://magento.test" --db-host 127.0.0.1 --db-name magento --db-user magento --db-password magento --session-save files --use-rewrites 1 --use-secure 0 --opensearch-host="opensearch" --opensearch-port="9200" --timezone="Europe/Amsterdam" -vvv
+          bin/magento setup:install \
+            --admin-email="magento@magento.com" \
+            --admin-firstname="admin" \
+            --admin-lastname="admin" \
+            --admin-password="admin123!#" \
+            --admin-user="admin" \
+            --backend-frontname="admin" \
+            --base-url="http://magento.test" \
+            --cleanup-database \
+            --db-host="mysql" \
+            --db-name="magento" \
+            --db-password="magento" \
+            --db-user="magento" \
+            --opensearch-host="opensearch" \
+            --opensearch-port=9200 \
+            --search-engine="opensearch" \
+            --session-save="files" \
+            --skip-db-validation \
+            --timezone="Europe/Amsterdam" \
+            --use-rewrites=1 \
+            --use-secure-admin=0 \
+            --use-secure=0 \
+            -vvv
           bin/magento setup:upgrade
         working-directory: 'magento'
 
