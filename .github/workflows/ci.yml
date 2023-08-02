@@ -72,7 +72,7 @@ jobs:
 
       - name: "Create Magento 2.4.6 project with testing dependencies"
         run: |
-          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento
+          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento --q
         if: hashFiles('magento/composer.json') == ''
 
       - name: "Checkout"
@@ -112,8 +112,9 @@ jobs:
 
       - name: "Install Behat Magento 2 Extension in the Magento 2 Test Environment"
         run: |
+          composer config minimum-stability dev
           composer config repositories.behat-m2-extension path vendor/seec/behat-magento2-extension
-          composer require --dev seec/behat-magento2-extension:@dev
+          composer require seec/behat-magento2-extension:@dev
         working-directory: 'magento'
 
       - name: "Install Behat Magento 2 Extension's testing dependencies"
