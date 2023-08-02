@@ -72,7 +72,7 @@ jobs:
 
       - name: "Create Magento 2.4.6 project with testing dependencies"
         run: |
-          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento --q
+          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento
         if: hashFiles('magento/composer.json') == ''
 
       - name: "Checkout"
