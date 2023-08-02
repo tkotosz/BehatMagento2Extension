@@ -123,9 +123,11 @@ jobs:
 
       - name: "PhpStan for Src and Feature Contexts"
         run: "vendor/bin/phpstan analyse --error-format=checkstyle src/ features/ --level=8 | cs2pr"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
       - name: "PhpStan for Test"
         run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
       - name: "Run full test suite"
         run: "vendor/bin/behat --tags=@virtual --stop-on-failure --config behat.yml"
