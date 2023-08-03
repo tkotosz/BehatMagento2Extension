@@ -175,11 +175,12 @@ final class DefaultFixtures implements DefaultFixturesInterface
             $stock->setName($name);
             $repo->save($stock);
         } catch (DomainException|CouldNotSaveException $e) {
-            echo sprintf('Could not create stock regularly, retry with direct injection. Error: %s, File: %s:%s',
-                    $e->getPrevious()?->getMessage() ?? $e->getMessage(),
-                    $e->getFile(),
-                    $e->getLine()
-                ) . \PHP_EOL;
+            echo sprintf(
+                'Could not create stock regularly, retry with direct injection. Error: %s, File: %s:%s',
+                $e->getPrevious()?->getMessage() ?? $e->getMessage(),
+                $e->getFile(),
+                $e->getLine(),
+            ) . \PHP_EOL;
             $connection->insert('inventory_stock', ['stock_id' => 1, 'name' => $name]);
             $stock = $repo->get(1);
         }
