@@ -1,3 +1,9 @@
 default:
-  extensions:
-   Bex\Behat\Magento2Extension: ~
+  formatters:
+    progress: true
+
+  suites:
+    default:
+      contexts:
+        - SEEC\Behat\Magento2Extension\Features\Bootstrap\Context\TestRunnerContext
+        - SEEC\BehatTestRunner\Context\TestRunnerContext

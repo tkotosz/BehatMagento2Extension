@@ -10,7 +10,7 @@ You can enable the extension in your ``behat.yml`` in following way:
 
     default:
       extensions:
-        Bex\Behat\Magento2Extension: ~
+        SEEC\Behat\Magento2Extension: ~
 
 Configure the Service Container
 -------------------------------
@@ -21,7 +21,7 @@ In order to be able to access the Magento 2 services from your Behat Contexts yo
     default:
       suites:
         yoursuite:
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
 
 With the above configuration Behat will use the service container provided by this extension which makes all services defined in the Magento 2 DI available to inject into any Context.
 
@@ -34,9 +34,9 @@ Note that you need to pass over the dependencies to your Contexts manually like 
         yoursuite:
           contexts:
             - YourContext:
-              - '@Magento\Catalog\Api\ProductRepositoryInterface'
+                - '@Magento\Catalog\Api\ProductRepositoryInterface'
           
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
 
 Enable Autowiring for Contexts
 ------------------------------
@@ -54,7 +54,7 @@ You can enable this feature by adding ``autowire: true`` to the behat config of 
           contexts:
             - YourContext
 
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
 
 Note that the argument resolver is able to autowire services for:
  - constructor arguments
@@ -78,7 +78,7 @@ You can configure the required area in the following way:
           contexts:
             - YourContext
           
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
           
           magento:
             area: adminhtml
@@ -156,7 +156,7 @@ In order to load this custom DI configuration during the test run the test area 
           contexts:
             - YourContext
           
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
           
           magento:
             area: test
@@ -193,7 +193,7 @@ But don't worry this extension allows you to register your helper services in a 
 
     default:
       extensions:
-        Bex\Behat\Magento2Extension:
+        SEEC\Behat\Magento2Extension:
           services: features/bootstrap/config/services.yml
 
 Note: You can use ``yml``, ``xml`` or ``php`` format. For more information see the official documentation of the `Symfony DI component <https://symfony.com/doc/current/components/dependency_injection.html>`_.
@@ -225,7 +225,7 @@ For more information see the official documentation of the `Symfony DI component
             - YourContext:
               - '@Magento\Catalog\Api\ProductRepositoryInterface'
               - '@SharedService'
-          services: '@bex.magento2_extension.service_container'
+          services: '@seec.magento2_extension.service_container'
 
 Alternatively if you are using autowiring (see Enable Autowiring for Contexts section) then you can skip this step since the context arguments will be autowired even from this custom Symfony service container.
 
@@ -314,5 +314,5 @@ If your Magento ``bootstrap.php`` is not available in the default ``app/bootstra
 
     default:
       extensions:
-        Bex\Behat\Magento2Extension:
+        SEEC\Behat\Magento2Extension:
           bootstrap: path/to/your/bootstrap.php # by default app/bootstrap.php

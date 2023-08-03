@@ -1,3 +1,4 @@
+@virtual
 Feature: Injecting service from Magento DI to Behat Context through a Transformer argument
   As a developer
   In order to write Behat tests easily
@@ -52,10 +53,10 @@ Feature: Injecting service from Magento DI to Behat Context through a Transforme
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension: ~
+          SEEC\Behat\Magento2Extension: ~
       """
     When I run Behat
     Then I should see the tests passing

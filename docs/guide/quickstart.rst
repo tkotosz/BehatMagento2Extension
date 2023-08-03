@@ -8,7 +8,7 @@ If you didn't install Behat already, then you can install it with composer in th
 
 .. code-block:: bash
 
-  $ composer require --dev behat/behat
+  $ composer require behat/behat
 
 For alternative installation options check the `Behat official documentation <https://docs.behat.org/en/latest/quick_start.html#installation>`_
 
@@ -19,7 +19,7 @@ Similarly you can install the extension via composer:
 
 .. code-block:: bash
 
-  $ composer require --dev bex/behat-magento2-extension
+  $ composer require --dev seec/behat-magento2-extension
 
 For more information see the the :doc:`installation section of this documentation </guide/installation>`.
 
@@ -32,7 +32,7 @@ You need to enable the extension in the Behat configuration and configure your B
 
   default:
     extensions:
-      Bex\Behat\Magento2Extension: ~
+      SEEC\Behat\Magento2Extension: ~
 
     suites:
       application:
@@ -41,7 +41,7 @@ You need to enable the extension in the Behat configuration and configure your B
         contexts:
           - FeatureContext
 
-        services: '@bex.magento2_extension.service_container'
+        services: '@seec.magento2_extension.service_container'
 
 With the above configuration:
  - The extension is enabled

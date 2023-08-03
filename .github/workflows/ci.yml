@@ -5,49 +5,54 @@ on:
   push:
     branches:
       - "master"
-      - "2.x"
-      - "3.x"
 
 jobs:
   behat:
     name: "Acceptance Tests"
-
     runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.2"
 
     env:
       M2_INSTANCE_ROOT_DIR: ${{ github.workspace }}/magento
 
     services:
       mysql:
-        image: mariadb:10.4
+        image: mariadb:10.6
         env:
           MYSQL_USER: magento
           MYSQL_PASSWORD: magento
-          MYSQL_DATABASE: magentodb
+          MYSQL_DATABASE: magento
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
         options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
 
-      elasticsearch:
-        image: elasticsearch:7.12.1
-        env:
-          ES_JAVA_OPTS: -Xms512m -Xmx512m
-          discovery.type: single-node
+      opensearch:
+        image: opensearchproject/opensearch:2.7.0
         ports:
           - 9200:9200
+        env:
+          discovery.type: single-node
+          cluster.name: opensearch-cluster
+          node.name: opensearch-node
+          bootstrap.memory_lock: true
+          OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+          DISABLE_INSTALL_DEMO_CONFIG: true
+          plugins.security.disabled: true
+          plugins.security.ssl.http.enabled: false
+        options: --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+
 
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-        with:
-          path: 'behat-magento2-extension'
-
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: none
-          php-version: 7.4
+          php-version: "${{ matrix.php-version }}"
           extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip, sockets
           ini-values: memory_limit=-1
           tools: composer:v2, cs2pr
@@ -63,40 +68,121 @@ jobs:
           path: |
             ~/.composer/cache
             magento
-          key: "magento-2.4.2-with-php-7.4"
+          key: "magento-2.4.6-with-php-${{ matrix.php-version }}"
 
-      - name: "Create Magento 2.4.2 project with testing dependencies"
+      - name: "Create Magento 2.4.6 project"
         run: |
-          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.2 magento
-          cd magento
-          composer require tkotosz/test-area-magento2
-          composer require --dev behat/behat friends-of-behat/mink-extension behat/mink-goutte-driver
-          cd -
+          composer create-project --no-progress --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento
         if: hashFiles('magento/composer.json') == ''
+
+      - name: "Add testing dependencies"
+        run: |
+          composer config --no-plugins allow-plugins.magento/* true
+          composer config --no-plugins allow-plugins.php-http/discovery true
+          composer config --no-plugins allow-plugins.laminas/laminas-dependency-plugin true
+          composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer require --no-progress behat/behat tkotosz/test-area-magento2
+          composer install --no-progress
+        working-directory: 'magento'
+
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+        with:
+          path: 'magento/vendor/seec/behat-magento2-extension'
 
       - name: "Install Magento"
         run: |
           rm -f app/etc/env.php
           mkdir -p pub/static pub/media
-          bin/magento setup:install --admin-email "kotosy.magento@gmail.com" --admin-firstname "admin" --admin-lastname "admin" --admin-password "admin123" --admin-user "admin" --backend-frontname admin --base-url "http://magento.test" --db-host 127.0.0.1 --db-name magentodb --db-user magento --db-password magento --session-save files --use-rewrites 1 --use-secure 0 --search-engine=elasticsearch7 --elasticsearch-host=127.0.0.1 --elasticsearch-port=9200 -vvv
-          bin/magento setup:upgrade
+          composer require --dev behat/behat tkotosz/test-area-magento2
+          bin/magento setup:install \
+            --admin-email="magento@magento.com" \
+            --admin-firstname="admin" \
+            --admin-lastname="admin" \
+            --admin-password="admin123!#" \
+            --admin-user="admin" \
+            --backend-frontname="admin" \
+            --base-url="http://magento.test" \
+            --cleanup-database \
+            --db-host="127.0.0.1" \
+            --db-name="magento" \
+            --db-password="magento" \
+            --db-user="magento" \
+            --opensearch-host="127.0.0.1" \
+            --opensearch-port=9200 \
+            --search-engine="opensearch" \
+            --session-save="files" \
+            --skip-db-validation \
+            --timezone="Europe/Amsterdam" \
+            --use-rewrites=1 \
+            --use-secure-admin=0 \
+            --use-secure=0
+          bin/magento --quiet deploy:mode:set developer
+          bin/magento --quiet setup:upgrade
         working-directory: 'magento'
 
-      - name: "Install Behat Magento 2 Extension in the Magento 2 Test Environment"
+      - name: "Install BehatMagento2 Extension"
         run: |
-          composer config repositories.behat-m2-extension path ../behat-magento2-extension
-          composer require --dev bex/behat-magento2-extension:@dev
+          composer config minimum-stability dev
+          composer config repositories.behat-m2-extension path vendor/seec/behat-magento2-extension
+          composer require seec/behat-magento2-extension:@dev
         working-directory: 'magento'
 
-      - name: "Install Behat Magento 2 Extension's testing dependencies"
-        run: |
-          composer install
-        working-directory: 'behat-magento2-extension'
+      - name: "Install BehatMagento2 Extension dependencies"
+        run: "composer install --no-interaction --no-progress --no-suggest"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "Run tests without compiled DI"
-        run: "bin/behat -swithout_compiled_di"
-        working-directory: 'behat-magento2-extension'
+      - name: "Run phpstan for src/ and feature/"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle src/ features/ --level=8 | cs2pr"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
-      - name: "Run tests with compiled DI"
-        run: "bin/behat -swith_compiled_di"
-        working-directory: 'behat-magento2-extension'
+      - name: "Run phpstan for tests/"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
+
+      - name: "Run Behat tests"
+        run: "vendor/bin/behat --stop-on-failure --config behat.yml.dist --tags=@virtual"
+        working-directory: 'magento/vendor/seec/behat-magento2-extension'
+
+  code-style:
+    name: "CodeStyle + UnitTests"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.2"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Setup Composer Auth"
+        run: "echo $COMPOSER_AUTH_JSON > ~/.composer/auth.json"
+        env:
+          COMPOSER_AUTH_JSON: ${{ secrets.COMPOSER_AUTH_JSON }}
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: none
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v2"
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: "php-${{ matrix.php-version }}"
+
+      - name: "Install dependencies"
+        run: "composer install --no-interaction --no-progress --no-suggest"
+
+      - name: "EasyCodingStandards for Src, Features and Tests"
+        run: "vendor/bin/ecs check src/ features/ tests/ --no-interaction --no-progress-bar"
+
+      - name: "Run unit tests"
+        run: "vendor/bin/phpunit tests/"

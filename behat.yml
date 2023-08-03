@@ -1,9 +1,0 @@
-default:
-  suites:
-    without_compiled_di:
-      contexts:
-        - Bex\Behat\Magento2Extension\Acceptance\Context\WithoutCompiledDITestRunnerContext
-
-    with_compiled_di:
-      contexts:
-        - Bex\Behat\Magento2Extension\Acceptance\Context\WithCompiledDITestRunnerContext

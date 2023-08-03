@@ -51,4 +51,4 @@ The `Behat service autowiring feature <https://github.com/Behat/Behat/pull/1071>
         contexts:
           - YourContext
         
-        services: '@bex.magento2_extension.service_container'
+        services: '@seec.magento2_extension.service_container'

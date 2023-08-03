@@ -1,16 +1,19 @@
+@virtual
 Feature: Using helper services to access services outside of Magento
   As a developer
   In order to write Behat tests easily
   I should be able to inject services from an additional helper service container
 
-  Scenario: Inject simple helper service to Context
+  Background:
     Given I have the feature:
       """
       Feature: My awesome feature
       Scenario:
         Given a helper service has been successfully injected as argument to this step
       """
-    And I have the context:
+
+  Scenario: Inject simple helper service to Context
+    Given I have the context:
       """
       <?php
 
@@ -59,30 +62,23 @@ Feature: Using helper services to access services outside of Magento
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension:
+          SEEC\Behat\Magento2Extension:
             services: features/bootstrap/config/services.yml
       """
     When I run Behat
-    Then I should see the tests passing
+    Then I should not see a failing test
 
   Scenario: Inject dependencies to helper services
-    Given I have the feature:
-      """
-      Feature: My awesome feature
-      Scenario:
-        Given a helper service has been successfully injected as argument to this step
-      """
-    And I have the context:
+    Given I have the context:
       """
       <?php
 
       use Behat\Behat\Context\Context;
       use PHPUnit\Framework\Assert;
       use SharedService;
-      use Behat\Mink\Mink;
       use Magento\Sales\Api\OrderRepositoryInterface;
 
       class FeatureContext implements Context
@@ -95,7 +91,6 @@ Feature: Using helper services to access services outside of Magento
               Assert::assertInstanceOf(SharedService::class, $sharedService);
               Assert::assertInstanceOf(AnotherSharedService::class, $sharedService->another());
               Assert::assertInstanceOf(OrderRepositoryInterface::class, $sharedService->orderRepository());
-              Assert::assertInstanceOf(Mink::class, $sharedService->mink());
               Assert::assertNotEmpty($sharedService->basePath());
           }
       }
@@ -104,32 +99,23 @@ Feature: Using helper services to access services outside of Magento
       """
       <?php
 
-      use Behat\Mink\Mink;
       use Magento\Sales\Api\OrderRepositoryInterface;
 
       class SharedService
       {
-          /** @var AnotherSharedService */
-          private $anotherSharedService;
+          private AnotherSharedService $anotherSharedService;
 
-          /** @var OrderRepositoryInterface */
-          private $orderRepository;
+          private OrderRepositoryInterface $orderRepository;
 
-          /** @var Mink */
-          private $mink;
-
-          /** @var string */
-          private $basePath;
+          private string $basePath;
 
           public function __construct(
               AnotherSharedService $anotherSharedService,
               OrderRepositoryInterface $orderRepository,
-              Mink $mink,
               string $basePath
           ) {
               $this->anotherSharedService = $anotherSharedService;
               $this->orderRepository = $orderRepository;
-              $this->mink = $mink;
               $this->basePath = $basePath;
           }
 
@@ -141,11 +127,6 @@ Feature: Using helper services to access services outside of Magento
           public function orderRepository(): OrderRepositoryInterface
           {
               return $this->orderRepository;
-          }
-
-          public function mink(): Mink
-          {
-              return $this->mink;
           }
 
           public function basePath(): string
@@ -180,7 +161,6 @@ Feature: Using helper services to access services outside of Magento
           arguments:
             - '@AnotherSharedService'
             - '@Magento\Sales\Api\OrderRepositoryInterface'
-            - '@mink'
             - '%paths.base%'
       """
     And I have the configuration:
@@ -191,35 +171,23 @@ Feature: Using helper services to access services outside of Magento
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension:
+          SEEC\Behat\Magento2Extension:
             services: features/bootstrap/config/services.yml
-          Behat\MinkExtension:
-            base_url:  'http://example.com'
-            sessions:
-              default:
-                goutte: ~
       """
     When I run Behat
     Then I should see the tests passing
 
   Scenario: Autowire helper service dependencies
-    Given I have the feature:
-      """
-      Feature: My awesome feature
-      Scenario:
-        Given a helper service has been successfully injected as argument to this step
-      """
-    And I have the context:
+    Given I have the context:
       """
       <?php
 
       use Behat\Behat\Context\Context;
       use PHPUnit\Framework\Assert;
       use SharedService;
-      use Behat\Mink\Mink;
       use Magento\Sales\Api\OrderRepositoryInterface;
 
       class FeatureContext implements Context
@@ -232,7 +200,6 @@ Feature: Using helper services to access services outside of Magento
               Assert::assertInstanceOf(SharedService::class, $sharedService);
               Assert::assertInstanceOf(AnotherSharedService::class, $sharedService->another());
               Assert::assertInstanceOf(OrderRepositoryInterface::class, $sharedService->orderRepository());
-              Assert::assertInstanceOf(Mink::class, $sharedService->mink());
               Assert::assertNotEmpty($sharedService->basePath());
           }
       }
@@ -246,27 +213,19 @@ Feature: Using helper services to access services outside of Magento
 
       class SharedService
       {
-          /** @var AnotherSharedService */
-          private $anotherSharedService;
+          private AnotherSharedService $anotherSharedService;
 
-          /** @var OrderRepositoryInterface */
-          private $orderRepository;
+          private OrderRepositoryInterface $orderRepository;
 
-          /** @var Mink */
-          private $mink;
-
-          /** @var string */
-          private $basePath;
+          private string $basePath;
 
           public function __construct(
               AnotherSharedService $anotherSharedService,
               OrderRepositoryInterface $orderRepository,
-              Mink $mink,
               string $basePath
           ) {
               $this->anotherSharedService = $anotherSharedService;
               $this->orderRepository = $orderRepository;
-              $this->mink = $mink;
               $this->basePath = $basePath;
           }
 
@@ -278,11 +237,6 @@ Feature: Using helper services to access services outside of Magento
           public function orderRepository(): OrderRepositoryInterface
           {
               return $this->orderRepository;
-          }
-
-          public function mink(): Mink
-          {
-              return $this->mink;
           }
 
           public function basePath(): string
@@ -316,7 +270,6 @@ Feature: Using helper services to access services outside of Magento
         SharedService:
           class: SharedService
           arguments:
-            $mink: '@mink'
             $basePath: '%paths.base%'
       """
     And I have the configuration:
@@ -327,16 +280,11 @@ Feature: Using helper services to access services outside of Magento
             autowire: true
             contexts:
               - FeatureContext
-            services: '@bex.magento2_extension.service_container'
+            services: '@seec.magento2_extension.service_container'
 
         extensions:
-          Bex\Behat\Magento2Extension:
+          SEEC\Behat\Magento2Extension:
             services: features/bootstrap/config/services.yml
-          Behat\MinkExtension:
-            base_url:  'http://example.com'
-            sessions:
-              default:
-                goutte: ~
       """
     When I run Behat
     Then I should see the tests passing

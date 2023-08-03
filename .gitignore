@@ -1,11 +1,11 @@
-# Composer packages directory
 /vendor
-
-# Composer executable files directory
-/bin
-
-# Installed Composer packages versions
 /composer.lock
-
-# documentation local build directory
-docs/_build
+/docs/_build
+/.env
+/behat.yml
+/php_error.log
+/.phpunit.result.cache
+/.idea
+/magento
+/test_dir
+/docker/data
