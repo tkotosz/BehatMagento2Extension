@@ -83,6 +83,8 @@ jobs:
           composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer require --no-progress behat/behat tkotosz/test-area-magento2
           composer install --no-progress
+        working-directory: 'magento'
+
       - name: "Checkout"
         uses: "actions/checkout@v2"
         with:
