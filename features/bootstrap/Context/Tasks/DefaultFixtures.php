@@ -175,7 +175,7 @@ final class DefaultFixtures implements DefaultFixturesInterface
             $stock->setName($name);
             $repo->save($stock);
         } catch (DomainException|CouldNotSaveException $e) {
-            print sprintf('Could not create stock regularry, retry with direct injection. Error: %s, File: %s:%s', $e->getMessage(), $e->getFile(), $e->getLine()) . PHP_EOL;
+            echo sprintf('Could not create stock regularry, retry with direct injection. Error: %s, File: %s:%s', $e->getMessage(), $e->getFile(), $e->getLine()) . \PHP_EOL;
             $connection->insert('inventory_stock', ['stock_id' => 1, 'name' => $name]);
             $stock = $repo->get(1);
         }
@@ -185,10 +185,7 @@ final class DefaultFixtures implements DefaultFixturesInterface
         return $stock;
     }
 
-    /**
-     * @return GroupInterface|StoreInterface|WebsiteInterface|StockInterface|null
-     */
-    private function getExistingEntity(string $interface, string $identifier): ?object
+    private function getExistingEntity(string $interface, string $identifier): null|GroupInterface|StoreInterface|WebsiteInterface|StockInterface
     {
         $checkBy = 'getCode';
         switch ($interface) {
