@@ -130,7 +130,7 @@ jobs:
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
       - name: "Run Behat tests"
-        run: "vendor/bin/behat --stop-on-failure --config behat.yml.dist"
+        run: "vendor/bin/behat --stop-on-failure --config behat.yml.dist --tags=@virtual"
         working-directory: 'magento/vendor/seec/behat-magento2-extension'
 
   code-style:

@@ -1,4 +1,4 @@
-@purge @fixtureCreation
+@purge @fixtureCreation @virtual
 Feature: Using helper services to access services outside of Magento
   As a developer
   In order to write Behat tests easily

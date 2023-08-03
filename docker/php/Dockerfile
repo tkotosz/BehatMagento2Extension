@@ -87,8 +87,7 @@ COPY ./behat.yml.dist /var/www/html/vendor/seec/behat-magento2-extension/behat.y
 COPY ./ecs.php /var/www/html/vendor/seec/behat-magento2-extension/ecs.php
 COPY ./phpstan.neon /var/www/html/vendor/seec/behat-magento2-extension/phpstan.neon
 COPY ./composer.json /var/www/html/vendor/seec/behat-magento2-extension/composer.json
-COPY ./composer.lock /var/www/html/vendor/seec/behat-magento2-extension/composer.lock
-COPY ./vendor /var/www/html/vendor/seec/behat-magento2-extension/vendor
+
 RUN install-extension
 
 WORKDIR /var/www/html/vendor/seec/behat-magento2-extension
