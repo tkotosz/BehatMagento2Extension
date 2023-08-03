@@ -70,11 +70,19 @@ jobs:
             magento
           key: "magento-2.4.6-with-php-${{ matrix.php-version }}"
 
-      - name: "Create Magento 2.4.6 project with testing dependencies"
+      - name: "Create Magento 2.4.6 project"
         run: |
-          composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento
+          composer create-project --no-progress --no-install --repository=https://repo.magento.com/ magento/project-community-edition=2.4.6 magento
         if: hashFiles('magento/composer.json') == ''
 
+      - name: "Add testing dependencies"
+        run: |
+          composer config --no-plugins allow-plugins.magento/* true
+          composer config --no-plugins allow-plugins.php-http/discovery true
+          composer config --no-plugins allow-plugins.laminas/laminas-dependency-plugin true
+          composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer require --no-progress behat/behat tkotosz/test-area-magento2
+          composer install --no-progress
       - name: "Checkout"
         uses: "actions/checkout@v2"
         with:
@@ -84,6 +92,7 @@ jobs:
         run: |
           rm -f app/etc/env.php
           mkdir -p pub/static pub/media
+          composer require --dev behat/behat tkotosz/test-area-magento2
           bin/magento setup:install \
             --admin-email="magento@magento.com" \
             --admin-firstname="admin" \
@@ -105,9 +114,9 @@ jobs:
             --timezone="Europe/Amsterdam" \
             --use-rewrites=1 \
             --use-secure-admin=0 \
-            --use-secure=0 \
-            -vvv
-          bin/magento setup:upgrade
+            --use-secure=0
+          bin/magento --quiet deploy:mode:set developer
+          bin/magento --quiet setup:upgrade
         working-directory: 'magento'
 
       - name: "Install BehatMagento2 Extension"
