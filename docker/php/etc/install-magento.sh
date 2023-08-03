@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+cd /var/www/html
 rm -f app/etc/env.php
 mkdir -p pub/static pub/media
 $(which php) bin/magento setup:install \

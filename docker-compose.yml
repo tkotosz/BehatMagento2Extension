@@ -11,9 +11,15 @@ services:
         MAGENTO_PUBLIC_KEY: ${MAGENTO_PUBLIC_KEY}
         MAGENTO_SECRET_KEY: ${MAGENTO_SECRET_KEY}
     volumes:
-      - ./:/var/www/html/vendor/seec/behat-magento2-extension
-      - ./behat.yml:/var/www/html/behat.yml
-      - ./features:/var/www/html/features
+      - ./src:/var/www/html/vendor/seec/behat-magento2-extension/src
+      - ./features:/var/www/html/vendor/seec/behat-magento2-extension/features
+      - ./tests:/var/www/html/vendor/seec/behat-magento2-extension/tests
+      - ./behat.yml.dist:/var/www/html/vendor/seec/behat-magento2-extension/behat.yml.dist
+      - ./ecs.php:/var/www/html/vendor/seec/behat-magento2-extension/ecs.php
+      - ./phpstan.neon:/var/www/html/vendor/seec/behat-magento2-extension/phpstan.neon
+      - ./composer.json:/var/www/html/vendor/seec/behat-magento2-extension/composer.json
+      - ./composer.lock:/var/www/html/vendor/seec/behat-magento2-extension/composer.lock
+      - ./vendor:/var/www/html/vendor/seec/behat-magento2-extension/vendor
       - ./magento:/var/www/html/vendor/magento-ext
     environment:
       PHP_IDE_CONFIG: serverName=magento2-behat-extension

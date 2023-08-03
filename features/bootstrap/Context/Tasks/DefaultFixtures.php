@@ -7,6 +7,7 @@ namespace SEEC\Behat\Magento2Extension\Features\Bootstrap\Context\Tasks;
 use DomainException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -173,7 +174,8 @@ final class DefaultFixtures implements DefaultFixturesInterface
             $stock = $this->getObjectManager()->create(StockInterface::class);
             $stock->setName($name);
             $repo->save($stock);
-        } catch (DomainException $e) {
+        } catch (DomainException|CouldNotSaveException $e) {
+            print sprintf('Could not create stock regularry, retry with direct injection. Error: %s, File: %s:%s', $e->getMessage(), $e->getFile(), $e->getLine()) . PHP_EOL;
             $connection->insert('inventory_stock', ['stock_id' => 1, 'name' => $name]);
             $stock = $repo->get(1);
         }

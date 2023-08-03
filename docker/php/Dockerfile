@@ -80,12 +80,18 @@ RUN create-auth-file
 RUN rm -rf /var/www/html/*
 RUN fetch-magento
 
-COPY ./ /var/www/html/vendor/seec/behat-magento2-extension/
+COPY ./src /var/www/html/vendor/seec/behat-magento2-extension/src
+COPY ./features /var/www/html/vendor/seec/behat-magento2-extension/features
+COPY ./tests /var/www/html/vendor/seec/behat-magento2-extension/tests
+COPY ./behat.yml.dist /var/www/html/vendor/seec/behat-magento2-extension/behat.yml.dist
+COPY ./ecs.php /var/www/html/vendor/seec/behat-magento2-extension/ecs.php
+COPY ./phpstan.neon /var/www/html/vendor/seec/behat-magento2-extension/phpstan.neon
+COPY ./composer.json /var/www/html/vendor/seec/behat-magento2-extension/composer.json
+COPY ./composer.lock /var/www/html/vendor/seec/behat-magento2-extension/composer.lock
+COPY ./vendor /var/www/html/vendor/seec/behat-magento2-extension/vendor
 RUN install-extension
 
-COPY ./behat.yml /var/www/html/behat.yml
-
-WORKDIR /var/www/html
+WORKDIR /var/www/html/vendor/seec/behat-magento2-extension
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 CMD ["tail", "-F", "/var/www/html/php_error.log"]
