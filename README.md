@@ -1,8 +1,8 @@
 Behat Magento2 Extension
 ======================
 
-[![License](https://poser.pugx.org/nopenopenope/behat-magento2-extension/license)](https://packagist.org/packages/nopenopenope/behat-magento2-extension)
-[![Latest Stable Version](https://poser.pugx.org/nopenopenope/behat-magento2-extension/version)](https://packagist.org/packages/nopenopenope/behat-magento2-extension)
+[![License](https://poser.pugx.org/seec/behat-magento2-extension/license)](https://packagist.org/packages/seec/behat-magento2-extension)
+[![Latest Stable Version](https://poser.pugx.org/seec/behat-magento2-extension/version)](https://packagist.org/packages/seec/behat-magento2-extension)
 ![Build Status](https://github.com/nopenopenope/BehatMagento2Extension/actions/workflows/ci.yml/badge.svg)
 
 This is a fork of the [BehatMagentoExtension](https://github.com/tkotosz/BehatMagento2Extension), which is
