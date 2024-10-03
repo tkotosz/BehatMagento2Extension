@@ -22,7 +22,7 @@ class Magento2SymfonyServiceContainer extends SymfonyServiceContainer implements
         $this->magentoObjectManager = $magentoObjectManager;
     }
 
-    public function has($id)
+    public function has(string $id): bool
     {
         try {
             $this->magentoObjectManager->get($id);
@@ -32,7 +32,7 @@ class Magento2SymfonyServiceContainer extends SymfonyServiceContainer implements
         }
     }
 
-    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE): ?object
     {
         try {
             return $this->magentoObjectManager->get($id);
@@ -41,7 +41,7 @@ class Magento2SymfonyServiceContainer extends SymfonyServiceContainer implements
         }
     }
 
-    public function getDefinition($id)
+    public function getDefinition(string $id): Definition
     {
         return (new Definition($id, [$id]))->setFactory([new Reference('magento2.object_manager'), 'get']);
     }

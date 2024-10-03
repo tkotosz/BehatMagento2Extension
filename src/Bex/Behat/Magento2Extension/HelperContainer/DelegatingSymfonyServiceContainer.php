@@ -19,7 +19,7 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
         $this->fallbackContainers = $symfonyServiceContainers;
     }
 
-    public function has($id)
+    public function has(string $id): bool
     {
         if (!$this->isSupportedServiceId($id)) {
             return false;
@@ -38,7 +38,7 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
         return false;
     }
 
-    public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
+    public function get(string $id, int $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE): ?object
     {
         if (!$this->isSupportedServiceId($id)) {
             return null;
@@ -61,7 +61,7 @@ class DelegatingSymfonyServiceContainer extends SymfonyServiceContainer implemen
         throw new ServiceNotFoundException($id);
     }
 
-    public function getDefinition($id)
+    public function getDefinition(string $id): \Symfony\Component\DependencyInjection\Definition
     {
         try {
             return parent::getDefinition($id);
