@@ -6,7 +6,7 @@ class WithoutCompiledDITestRunnerContext extends TestRunnerContext
 {
     public function iRunBehat($parameters = '', $phpParameters = '')
     {
-        $this->runMagentoCommand('cache:clear');
+        $this->runMagentoCommand('cache:clean');
         parent::iRunBehat($parameters, $phpParameters);
     }
 }

@@ -42,7 +42,7 @@ abstract class TestRunnerContext extends DefaultTestRunnerContext
 
         $this->filesystem->copy('/tmp/config.php.backup', $this->workingDirectory . '/app/etc/config.php', true);
         $this->filesystem->remove('/tmp/config.php.backup');
-        $this->runMagentoCommand('cache:clear');
+        $this->runMagentoCommand('cache:clean');
     }
 
     /**
@@ -174,10 +174,32 @@ CONTENT;
     protected function runMagentoCommand(string $command, string $arguments = '')
     {
         $magentoProcess = new Process(
-            sprintf('%s %s %s', 'bin/magento', $command, !empty($arguments) ? escapeshellarg($arguments) : ''),
+            ['bin/magento', $command, $arguments],
             $this->workingDirectory
         );
         $magentoProcess->setTimeout(120);
         $magentoProcess->run();
+
+        if (!empty($magentoProcess->getErrorOutput())) {
+            echo "-----" . PHP_EOL;
+            echo $magentoProcess->getOutput() . PHP_EOL;
+            echo $magentoProcess->getErrorOutput() . PHP_EOL;
+            echo "-----" . PHP_EOL;
+        }
+    }
+
+    /**
+     * @param  AfterScenarioScope $scope
+     */
+    public function printTesterOutputOnFailure($scope)
+    {
+        if ($this->behatProcess !== null && !$scope->getTestResult()->isPassed()) {
+            echo "-----" . PHP_EOL;
+            echo $this->behatProcess->getOutput() . PHP_EOL;
+            echo $this->behatProcess->getErrorOutput() . PHP_EOL;
+            echo "-----" . PHP_EOL;
+        }
+
+        parent::printTesterOutputOnFailure($scope);
     }
 }
